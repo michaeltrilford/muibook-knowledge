@@ -6,12 +6,18 @@
  * Exposes the structured knowledge of the Muibook component library to AI assistants
  * (Antigravity, OpenCode, GPT, Codex, Claude Code, Claude Desktop, etc.).
  * 
- * Written in pure, dependency-free Node.js for maximum speed, compatibility, and simplicity.
+ * Supports both stdio (default) and SSE (HTTP) transport modes.
+ * 
+ * Run in SSE mode:
+ *   node mcp-server.js --sse
+ *   node mcp-server.js --port 22222
  */
 
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
+const http = require('http');
+const url = require('url');
 
 // --- Helper: TypeScript to JavaScript converter ---
 function tsToJs(tsCode) {
@@ -303,16 +309,16 @@ function formatComponentMarkdown(name) {
 }
 
 // --- JSON-RPC Message Handlers ---
-function handleMessage(message) {
+function handleMessage(message, respond, respondError) {
   const { jsonrpc, id, method, params } = message;
 
   if (jsonrpc !== "2.0") {
-    return sendError(id, -32600, "Invalid JSON-RPC request.");
+    return respondError(id, -32600, "Invalid JSON-RPC request.");
   }
 
   switch (method) {
     case "initialize":
-      return sendResponse(id, {
+      return respond(id, {
         protocolVersion: "2024-11-05",
         capabilities: {
           tools: {}
@@ -327,10 +333,10 @@ function handleMessage(message) {
       return;
 
     case "ping":
-      return sendResponse(id, {});
+      return respond(id, {});
 
     case "tools/list":
-      return sendResponse(id, {
+      return respond(id, {
         tools: [
           {
             name: "lookup_component",
@@ -408,36 +414,35 @@ function handleMessage(message) {
 
     case "tools/call":
       if (!params || !params.name) {
-        return sendError(id, -32602, "Missing tool name parameter.");
+        return respondError(id, -32602, "Missing tool name parameter.");
       }
-      return handleToolCall(id, params.name, params.arguments || {});
+      return handleToolCall(id, params.name, params.arguments || {}, respond, respondError);
 
     default:
-      return sendError(id, -32601, `Method not found: ${method}`);
+      return respondError(id, -32601, `Method not found: ${method}`);
   }
 }
 
-function handleToolCall(id, toolName, args) {
+function handleToolCall(id, toolName, args, respond, respondError) {
   try {
     switch (toolName) {
       case "lookup_component": {
         const { name } = args;
         if (!name) {
-          return sendToolError(id, "Parameter 'name' is required.");
+          return respondError(id, -32602, "Parameter 'name' is required.");
         }
         const markdown = formatComponentMarkdown(name);
-        return sendToolResult(id, markdown);
+        return respond(id, { content: [{ type: "text", text: markdown }] });
       }
 
       case "find_component": {
         const { query } = args;
         if (!query) {
-          return sendToolError(id, "Parameter 'query' is required.");
+          return respondError(id, "Parameter 'query' is required.");
         }
         const cleanQuery = query.toLowerCase();
         const matches = [];
 
-        // Search in keywords record
         const kwSource = keywordsData.keywords || {};
         for (const [compName, synonyms] of Object.entries(kwSource)) {
           const matchedSynonym = synonyms.find(syn => syn.toLowerCase().includes(cleanQuery));
@@ -456,7 +461,7 @@ function handleToolCall(id, toolName, args) {
         }
 
         if (matches.length === 0) {
-          return sendToolResult(id, `No components matched the query "${query}".`);
+          return respond(id, { content: [{ type: "text", text: `No components matched the query "${query}".` }] });
         }
 
         let md = `# Search Results for "${query}"\n\n`;
@@ -464,23 +469,23 @@ function handleToolCall(id, toolName, args) {
           md += `- **${m.key}** (\`<${m.tagName}>\`): ${m.description} *(Matched on ${m.matchedOn})*\n`;
         }
         md += `\nUse \`lookup_component\` with the tag name to retrieve full API documentation.`;
-        return sendToolResult(id, md);
+        return respond(id, { content: [{ type: "text", text: md }] });
       }
 
       case "get_compositions": {
         const useAgent = args.onlyAgentCuration === true;
         const comps = useAgent ? compositionsData.agentCompositions : compositionsData.compositions;
         if (!comps || Object.keys(comps).length === 0) {
-          return sendToolResult(id, "No compositions available.");
+          return respond(id, { content: [{ type: "text", text: "No compositions available." }] });
         }
-        return sendToolResult(id, JSON.stringify(comps, null, 2), "json");
+        return respond(id, { content: [{ type: "text", text: JSON.stringify(comps, null, 2) }] });
       }
 
       case "get_rules": {
         if (!rulesText) {
-          return sendToolResult(id, "No generation rules available.");
+          return respond(id, { content: [{ type: "text", text: "No generation rules available." }] });
         }
-        return sendToolResult(id, rulesText);
+        return respond(id, { content: [{ type: "text", text: rulesText }] });
       }
 
       case "get_dynamic_attrs": {
@@ -491,86 +496,162 @@ function handleToolCall(id, toolName, args) {
           const cleanName = name.toLowerCase();
           const attrData = componentsSection[cleanName];
           if (!attrData) {
-            return sendToolResult(id, `No dynamic attributes documented for component "${name}".`);
+            return respond(id, { content: [{ type: "text", text: `No dynamic attributes documented for component "${name}".` }] });
           }
-          return sendToolResult(id, JSON.stringify({ [cleanName]: attrData }, null, 2), "json");
+          return respond(id, { content: [{ type: "text", text: JSON.stringify({ [cleanName]: attrData }, null, 2) }] });
         }
 
-        return sendToolResult(id, JSON.stringify(dynamicAttrs, null, 2), "json");
+        return respond(id, { content: [{ type: "text", text: JSON.stringify(dynamicAttrs, null, 2) }] });
       }
 
       case "get_design_system": {
         if (!designDocs) {
-          return sendToolResult(id, "Design system documentation not found.");
+          return respond(id, { content: [{ type: "text", text: "Design system documentation not found." }] });
         }
-        return sendToolResult(id, designDocs);
+        return respond(id, { content: [{ type: "text", text: designDocs }] });
       }
 
       default:
-        return sendError(id, -32601, `Unknown tool: ${toolName}`);
+        return respondError(id, -32601, `Unknown tool: ${toolName}`);
     }
   } catch (err) {
-    return sendError(id, -32603, `Internal error executing tool: ${err.message}`);
+    return respondError(id, -32603, `Internal error executing tool: ${err.message}`);
   }
 }
 
-// --- Response Helpers ---
-function sendResponse(id, result) {
-  process.stdout.write(JSON.stringify({
-    jsonrpc: "2.0",
-    id,
-    result
-  }) + "\n");
-}
+// --- Transport Selection ---
+const args = process.argv.slice(2);
+const sseMode = args.includes('--sse') || args.some(arg => arg.startsWith('--port'));
+let port = 22222;
 
-function sendError(id, code, message, data) {
-  process.stdout.write(JSON.stringify({
-    jsonrpc: "2.0",
-    id,
-    error: {
-      code,
-      message,
-      data
-    }
-  }) + "\n");
-}
-
-function sendToolResult(id, text, format = "text") {
-  sendResponse(id, {
-    content: [
-      {
-        type: "text",
-        text: text
-      }
-    ]
-  });
-}
-
-function sendToolError(id, errorMessage) {
-  sendResponse(id, {
-    content: [
-      {
-        type: "text",
-        text: `Error: ${errorMessage}`
-      }
-    ],
-    isError: true
-  });
-}
-
-// --- Main Interface ---
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false
-});
-
-rl.on('line', (line) => {
-  if (!line.trim()) return;
-  try {
-    const message = JSON.parse(line);
-    handleMessage(message);
-  } catch (err) {
-    sendError(null, -32700, "Parse error: " + err.message);
+const portArgIndex = args.findIndex(arg => arg === '--port' || arg === '-p');
+if (portArgIndex !== -1 && args[portArgIndex + 1]) {
+  port = parseInt(args[portArgIndex + 1], 10);
+} else {
+  const portMatch = args.find(arg => arg.startsWith('--port='));
+  if (portMatch) {
+    port = parseInt(portMatch.split('=')[1], 10);
   }
-});
+}
+
+if (sseMode) {
+  // --- Run over HTTP Server-Sent Events (SSE) ---
+  const sessions = new Map();
+
+  const server = http.createServer((req, res) => {
+    // CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+      res.writeHead(200);
+      res.end();
+      return;
+    }
+
+    const parsedUrl = url.parse(req.url, true);
+
+    if (req.method === 'GET' && parsedUrl.pathname === '/sse') {
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive'
+      });
+
+      const sessionId = Math.random().toString(36).substring(2, 15);
+      sessions.set(sessionId, res);
+
+      // Send endpoint callback url to client
+      res.write(`event: endpoint\ndata: /message?session=${sessionId}\n\n`);
+
+      req.on('close', () => {
+        sessions.delete(sessionId);
+      });
+      return;
+    }
+
+    if (req.method === 'POST' && parsedUrl.pathname === '/message') {
+      const sessionId = parsedUrl.query.session;
+      const sseRes = sessions.get(sessionId);
+
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk;
+      });
+
+      req.on('end', () => {
+        try {
+          const message = JSON.parse(body);
+
+          const respond = (id, result) => {
+            const resp = JSON.stringify({ jsonrpc: "2.0", id, result });
+            if (sseRes) {
+              sseRes.write(`event: message\ndata: ${resp}\n\n`);
+            } else {
+              // Fallback directly to HTTP POST response if no SSE session
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(resp);
+            }
+          };
+
+          const respondError = (id, code, errMsg) => {
+            const resp = JSON.stringify({ jsonrpc: "2.0", id, error: { code, message: errMsg } });
+            if (sseRes) {
+              sseRes.write(`event: message\ndata: ${resp}\n\n`);
+            } else {
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(resp);
+            }
+          };
+
+          handleMessage(message, respond, respondError);
+
+          // If we responded via SSE, resolve the POST request immediately with 202 Accepted
+          if (sseRes) {
+            res.writeHead(202, { 'Content-Type': 'text/plain' });
+            res.end('Accepted');
+          }
+        } catch (err) {
+          res.writeHead(400, { 'Content-Type': 'text/plain' });
+          res.end('Bad Request');
+        }
+      });
+      return;
+    }
+
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
+  });
+
+  server.listen(port, () => {
+    console.error(`Muibook MCP SSE Server running on http://localhost:${port}`);
+    console.error(`SSE Endpoint: http://localhost:${port}/sse`);
+  });
+
+} else {
+  // --- Run over Stdio ---
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: false
+  });
+
+  const respond = (id, result) => {
+    process.stdout.write(JSON.stringify({ jsonrpc: "2.0", id, result }) + "\n");
+  };
+
+  const respondError = (id, code, errMsg) => {
+    process.stdout.write(JSON.stringify({ jsonrpc: "2.0", id, error: { code, message: errMsg } }) + "\n");
+  };
+
+  rl.on('line', (line) => {
+    if (!line.trim()) return;
+    try {
+      const message = JSON.parse(line);
+      handleMessage(message, respond, respondError);
+    } catch (err) {
+      respondError(null, -32700, "Parse error: " + err.message);
+    }
+  });
+}
