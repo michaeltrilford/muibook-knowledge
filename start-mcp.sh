@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Script to start the Muibook MCP server
-echo "Starting Muibook MCP server..."
-cd /Users/michaeltrilford/Github/muibook-knowledge || exit 1
-npm start
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo "Starting Muibook MCP server..." >&2
+cd "$SCRIPT_DIR"
+exec node mcp-server.js
