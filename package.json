@@ -1,0 +1,25 @@
+{
+  "name": "@muibook/knowledge",
+  "version": "1.0.0",
+  "description": "Authored and generated knowledge for the Muibook component library, including an MCP server.",
+  "main": "index.ts",
+  "bin": {
+    "muibook-mcp": "./mcp-server.js"
+  },
+  "scripts": {
+    "start": "node mcp-server.js"
+  },
+  "files": [
+    "custom-elements.json",
+    "dynamic-attrs.json",
+    "compositions.ts",
+    "keywords.ts",
+    "rules.ts",
+    "index.ts",
+    "AGENTS.md",
+    "DESIGN.md",
+    "mcp-server.js"
+  ],
+  "author": "Michael Trilford",
+  "license": "ISC"
+}
