@@ -552,6 +552,9 @@ if (sseMode) {
 
     const parsedUrl = url.parse(req.url, true);
 
+    // Logging to help troubleshoot connections
+    console.error(`[MCP SSE] Received ${req.method} request for ${req.url}`);
+
     if (req.method === 'GET' && parsedUrl.pathname === '/sse') {
       res.writeHead(200, {
         'Content-Type': 'text/event-stream',
@@ -562,18 +565,30 @@ if (sseMode) {
       const sessionId = Math.random().toString(36).substring(2, 15);
       sessions.set(sessionId, res);
 
-      // Send endpoint callback url to client
-      res.write(`event: endpoint\ndata: /message?session=${sessionId}\n\n`);
+      // Construct absolute URL dynamically using request host header to avoid resolution bugs in client
+      const host = req.headers.host || `localhost:${port}`;
+      const scheme = req.socket.encrypted ? 'https' : 'http';
+      const endpointUrl = `${scheme}://${host}/message?session=${sessionId}`;
+
+      console.error(`[MCP SSE] New session ${sessionId} connected. Directing POST messages to: ${endpointUrl}`);
+      res.write(`event: endpoint\ndata: ${endpointUrl}\n\n`);
 
       req.on('close', () => {
+        console.error(`[MCP SSE] Session ${sessionId} closed.`);
         sessions.delete(sessionId);
       });
       return;
     }
 
-    if (req.method === 'POST' && parsedUrl.pathname === '/message') {
-      const sessionId = parsedUrl.query.session;
+    // Support both /message and /sse for POST requests, using either query name 'session' or 'sessionId'
+    if (req.method === 'POST' && (parsedUrl.pathname === '/message' || parsedUrl.pathname === '/sse')) {
+      const sessionId = parsedUrl.query.session || parsedUrl.query.sessionId;
+      console.error(`[MCP SSE] Processing message POST for session: ${sessionId}`);
+
       const sseRes = sessions.get(sessionId);
+      if (!sseRes && sessionId) {
+        console.error(`[MCP SSE] WARNING: No active SSE session found for session ID: ${sessionId}`);
+      }
 
       let body = '';
       req.on('data', chunk => {
@@ -583,23 +598,30 @@ if (sseMode) {
       req.on('end', () => {
         try {
           const message = JSON.parse(body);
+          console.error(`[MCP SSE] Incoming RPC: ${message.method} (ID: ${message.id})`);
 
+          let responded = false;
           const respond = (id, result) => {
+            responded = true;
             const resp = JSON.stringify({ jsonrpc: "2.0", id, result });
             if (sseRes) {
+              console.error(`[MCP SSE] Sending response via SSE for message ID: ${id}`);
               sseRes.write(`event: message\ndata: ${resp}\n\n`);
             } else {
-              // Fallback directly to HTTP POST response if no SSE session
+              console.error(`[MCP SSE] Sending response directly via HTTP POST for message ID: ${id}`);
               res.writeHead(200, { 'Content-Type': 'application/json' });
               res.end(resp);
             }
           };
 
           const respondError = (id, code, errMsg) => {
+            responded = true;
             const resp = JSON.stringify({ jsonrpc: "2.0", id, error: { code, message: errMsg } });
             if (sseRes) {
+              console.error(`[MCP SSE] Sending error via SSE for message ID: ${id}`);
               sseRes.write(`event: message\ndata: ${resp}\n\n`);
             } else {
+              console.error(`[MCP SSE] Sending error directly via HTTP POST for message ID: ${id}`);
               res.writeHead(200, { 'Content-Type': 'application/json' });
               res.end(resp);
             }
@@ -611,8 +633,14 @@ if (sseMode) {
           if (sseRes) {
             res.writeHead(202, { 'Content-Type': 'text/plain' });
             res.end('Accepted');
+          } else if (!responded) {
+            // For direct HTTP JSON-RPC notifications (no ID, so respond/respondError are not called)
+            console.error(`[MCP SSE] Direct POST notification processed (no response required). Acknowledging with 204.`);
+            res.writeHead(204, { 'Content-Type': 'text/plain' });
+            res.end();
           }
         } catch (err) {
+          console.error(`[MCP SSE] Error parsing message body: ${err.message}`);
           res.writeHead(400, { 'Content-Type': 'text/plain' });
           res.end('Bad Request');
         }
@@ -620,6 +648,7 @@ if (sseMode) {
       return;
     }
 
+    console.error(`[MCP SSE] Route not found (404): ${req.method} ${parsedUrl.pathname}`);
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('Not Found');
   });
