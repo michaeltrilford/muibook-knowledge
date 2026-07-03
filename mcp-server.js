@@ -22,14 +22,18 @@ const url = require('url');
 // --- Helper: TypeScript to JavaScript converter ---
 function tsToJs(tsCode) {
   return tsCode
+    // Remove TS 4.9 "satisfies" clauses used after object literals
+    .replace(/\s+satisfies\s+Record<keyof typeof compositions,\s*\{[\s\S]*?\}>\s*;/g, ';')
     // Remove Pick typecast
     .replace(/\s+as\s+Pick<[^>]+>/g, '')
+    // Remove simple type assertions in expressions (e.g., "as CompositionKey[]")
+    .replace(/\s+as\s+[A-Za-z_$][\w$]*(?:\[\])?/g, '')
     // Remove type annotations on variables (e.g., ": Record<string, string[]>")
     .replace(/:\s*Record<[^>]+>/g, '')
     // Remove "as const"
     .replace(/\s+as\s+const\b/g, '')
     // Remove type declarations (e.g., "export type AgentKeywordKey = ...")
-    .replace(/export\s+type\s+\w+\s*=\s*[^;]+;/g, '')
+    .replace(/^\s*(?:export\s+)?type\s+\w+\s*=\s*[^;]+;\s*$/gm, '')
     // Replace "export const" with "const"
     .replace(/export\s+const\b/g, 'const ')
     // Replace "export default" with module.exports
@@ -48,6 +52,14 @@ function loadTsFile(filePath, exportNames) {
   return eval(wrapper);
 }
 
+function loadSection(label, loader) {
+  try {
+    loader();
+  } catch (err) {
+    console.error(`Initialization warning (${label}):`, err.message);
+  }
+}
+
 // --- Data Loading & Indexing ---
 let customElements = { modules: [] };
 const componentsIndex = {};
@@ -57,9 +69,36 @@ let compositionsData = { compositions: {}, agentCompositions: {} };
 let rulesText = '';
 let dynamicAttrs = {};
 let designDocs = '';
+const skillGuideDefinitions = [
+  {
+    id: 'create-web-components',
+    file: 'create-web-components-skill.md',
+    title: 'Create Web Components',
+    description: 'Build framework-agnostic native Web Components using explicit APIs, shadow DOM, slots, tokens, metadata, and knowledge exports.'
+  },
+  {
+    id: 'compose-web-components',
+    file: 'compose-web-components-skill.md',
+    title: 'Compose Web Components',
+    description: 'Compose Muibook Web Components into complete layouts using declarative HTML, layout primitives, native slots, and parent-child context.'
+  },
+  {
+    id: 'style-web-components',
+    file: 'style-web-components-skill.md',
+    title: 'Style Web Components',
+    description: 'Theme Muibook components with CSS variables, semantic/component tokens, and data-theme/data-brand attributes.'
+  },
+  {
+    id: 'create-ux-guidelines',
+    file: 'create-ux-guidelines-skill.md',
+    title: 'Create UX Guidelines',
+    description: 'Write practical component UX guidelines for usage, accessibility, anatomy, variants, rules, behavior, writing, and compositions.'
+  }
+];
+const skillGuides = {};
 
-try {
-  // 1. Load custom-elements.json
+// 1. Load custom-elements.json
+loadSection('custom-elements.json', () => {
   const cemPath = path.join(__dirname, 'custom-elements.json');
   if (fs.existsSync(cemPath)) {
     customElements = JSON.parse(fs.readFileSync(cemPath, 'utf8'));
@@ -82,42 +121,62 @@ try {
       }
     }
   }
+});
 
-  // 2. Load keywords.ts
+// 2. Load keywords.ts
+loadSection('keywords.ts', () => {
   const keywordsPath = path.join(__dirname, 'keywords.ts');
   if (fs.existsSync(keywordsPath)) {
     keywordsData = loadTsFile(keywordsPath, ['keywords', 'agentKeywords']);
   }
+});
 
-  // 3. Load compositions.ts
+// 3. Load compositions.ts
+loadSection('compositions.ts', () => {
   const compositionsPath = path.join(__dirname, 'compositions.ts');
   if (fs.existsSync(compositionsPath)) {
     compositionsData = loadTsFile(compositionsPath, ['compositions', 'agentCompositions']);
   }
+});
 
-  // 4. Load rules.ts
+// 4. Load rules.ts
+loadSection('rules.ts', () => {
   const rulesPath = path.join(__dirname, 'rules.ts');
   if (fs.existsSync(rulesPath)) {
     const rulesCode = fs.readFileSync(rulesPath, 'utf8');
     const match = rulesCode.match(/String\.raw`([\s\S]*?)`/);
     rulesText = match ? match[1] : rulesCode;
   }
+});
 
-  // 5. Load dynamic-attrs.json
+// 5. Load dynamic-attrs.json
+loadSection('dynamic-attrs.json', () => {
   const attrsPath = path.join(__dirname, 'dynamic-attrs.json');
   if (fs.existsSync(attrsPath)) {
     dynamicAttrs = JSON.parse(fs.readFileSync(attrsPath, 'utf8'));
   }
+});
 
-  // 6. Load DESIGN.md
+// 6. Load DESIGN.md
+loadSection('DESIGN.md', () => {
   const designPath = path.join(__dirname, 'DESIGN.md');
   if (fs.existsSync(designPath)) {
     designDocs = fs.readFileSync(designPath, 'utf8');
   }
+});
 
-} catch (err) {
-  console.error("Initialization warning:", err.message);
-}
+// 7. Load authored skill guides
+loadSection('skill guides', () => {
+  for (const guide of skillGuideDefinitions) {
+    const guidePath = path.join(__dirname, guide.file);
+    if (fs.existsSync(guidePath)) {
+      skillGuides[guide.id] = {
+        ...guide,
+        content: fs.readFileSync(guidePath, 'utf8')
+      };
+    }
+  }
+});
 
 // --- Component Resolver ---
 function findComponentDeclAndDoc(name) {
@@ -408,6 +467,42 @@ function handleMessage(message, respond, respondError) {
               type: "object",
               properties: {}
             }
+          },
+          {
+            name: "list_skill_guides",
+            description: "List authored Muibook skill guides available in this knowledge bundle.",
+            inputSchema: {
+              type: "object",
+              properties: {}
+            }
+          },
+          {
+            name: "get_skill_guide",
+            description: "Retrieve an authored Muibook skill guide by id or filename.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Guide id or filename, e.g. 'create-web-components' or 'create-web-components-skill.md'."
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "search_skill_guides",
+            description: "Search authored Muibook skill guides by title, description, filename, or content.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                query: {
+                  type: "string",
+                  description: "Search query, e.g. 'slots', 'tokens', 'guidelines', or 'composition'."
+                }
+              },
+              required: ["query"]
+            }
           }
         ]
       });
@@ -509,6 +604,65 @@ function handleToolCall(id, toolName, args, respond, respondError) {
           return respond(id, { content: [{ type: "text", text: "Design system documentation not found." }] });
         }
         return respond(id, { content: [{ type: "text", text: designDocs }] });
+      }
+
+      case "list_skill_guides": {
+        const guides = Object.values(skillGuides).map(({ id, file, title, description }) => ({
+          id,
+          file,
+          title,
+          description
+        }));
+        return respond(id, { content: [{ type: "text", text: JSON.stringify(guides, null, 2) }] });
+      }
+
+      case "get_skill_guide": {
+        const { id: requestedId } = args;
+        if (!requestedId) {
+          return respondError(id, -32602, "Parameter 'id' is required.");
+        }
+
+        const cleanId = requestedId.toLowerCase().trim().replace(/\.md$/, '').replace(/-skill$/, '');
+        const guide = skillGuides[cleanId] ||
+          Object.values(skillGuides).find(item =>
+            item.file.toLowerCase() === requestedId.toLowerCase().trim() ||
+            item.file.toLowerCase().replace(/\.md$/, '') === requestedId.toLowerCase().trim()
+          );
+
+        if (!guide) {
+          return respond(id, {
+            content: [{
+              type: "text",
+              text: `Skill guide "${requestedId}" not found. Use list_skill_guides to see available guides.`
+            }]
+          });
+        }
+
+        return respond(id, { content: [{ type: "text", text: guide.content }] });
+      }
+
+      case "search_skill_guides": {
+        const { query } = args;
+        if (!query) {
+          return respondError(id, -32602, "Parameter 'query' is required.");
+        }
+
+        const cleanQuery = query.toLowerCase();
+        const matches = Object.values(skillGuides)
+          .filter(guide =>
+            guide.id.toLowerCase().includes(cleanQuery) ||
+            guide.file.toLowerCase().includes(cleanQuery) ||
+            guide.title.toLowerCase().includes(cleanQuery) ||
+            guide.description.toLowerCase().includes(cleanQuery) ||
+            guide.content.toLowerCase().includes(cleanQuery)
+          )
+          .map(({ id, file, title, description }) => ({ id, file, title, description }));
+
+        if (matches.length === 0) {
+          return respond(id, { content: [{ type: "text", text: `No skill guides matched "${query}".` }] });
+        }
+
+        return respond(id, { content: [{ type: "text", text: JSON.stringify(matches, null, 2) }] });
       }
 
       default:

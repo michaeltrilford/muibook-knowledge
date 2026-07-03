@@ -16,6 +16,10 @@
     "keywords.ts",
     "rules.ts",
     "index.ts",
+    "create-web-components-skill.md",
+    "create-ux-guidelines-skill.md",
+    "compose-web-components-skill.md",
+    "style-web-components-skill.md",
     "AGENTS.md",
     "DESIGN.md",
     "mcp-server.js"
