@@ -69,6 +69,10 @@ let compositionsData = { compositions: {}, agentCompositions: {} };
 let rulesText = '';
 let dynamicAttrs = {};
 let designDocs = '';
+let knowledgeMap = '';
+let mcpInstructions = '';
+let resourceIndex = {};
+let skillIndex = {};
 const skillGuideDefinitions = [
   {
     id: 'create-web-components',
@@ -165,7 +169,30 @@ loadSection('DESIGN.md', () => {
   }
 });
 
-// 7. Load authored skill guides
+// 7. Load knowledge front-door docs and indexes
+loadSection('knowledge front door', () => {
+  const knowledgeMapPath = path.join(__dirname, 'knowledge-map.md');
+  if (fs.existsSync(knowledgeMapPath)) {
+    knowledgeMap = fs.readFileSync(knowledgeMapPath, 'utf8');
+  }
+
+  const mcpInstructionsPath = path.join(__dirname, 'mcp-instructions.md');
+  if (fs.existsSync(mcpInstructionsPath)) {
+    mcpInstructions = fs.readFileSync(mcpInstructionsPath, 'utf8');
+  }
+
+  const resourceIndexPath = path.join(__dirname, 'resource-index.json');
+  if (fs.existsSync(resourceIndexPath)) {
+    resourceIndex = JSON.parse(fs.readFileSync(resourceIndexPath, 'utf8'));
+  }
+
+  const skillIndexPath = path.join(__dirname, 'skill-index.json');
+  if (fs.existsSync(skillIndexPath)) {
+    skillIndex = JSON.parse(fs.readFileSync(skillIndexPath, 'utf8'));
+  }
+});
+
+// 8. Load authored skill guides
 loadSection('skill guides', () => {
   for (const guide of skillGuideDefinitions) {
     const guidePath = path.join(__dirname, guide.file);
@@ -367,6 +394,128 @@ function formatComponentMarkdown(name) {
   return md;
 }
 
+function asJsonText(value) {
+  return JSON.stringify(value, null, 2);
+}
+
+function getKnowledgeSummary() {
+  const componentCount = Object.keys(componentsIndex).length;
+  const dynamicAttrCount = Object.keys(dynamicAttrs.components || {}).length;
+  const skillCount = (skillIndex.skills || Object.keys(skillGuides)).length;
+  const resourceCount = (resourceIndex.resources || []).length;
+
+  return [
+    '# Muibook MCP Front Door',
+    '',
+    knowledgeMap || 'Knowledge map not found.',
+    '',
+    '## Available MCP Tools',
+    '',
+    '- `start_here`: read this front door and choose the next tool.',
+    '- `find_component`: search components by natural-language intent.',
+    '- `lookup_component`: read full API, slots, events, CSS vars, parts, and UX docs for one component.',
+    '- `get_compositions`: read realistic component-tree examples.',
+    '- `get_rules`: read component-tree generation rules.',
+    '- `get_dynamic_attrs`: read runtime/destination-only attrs.',
+    '- `get_design_system`: read token, surface, theme, and layout guidance.',
+    '- `list_skill_guides`, `search_skill_guides`, `get_skill_guide`: discover and read authored skills.',
+    '',
+    '## Bundle Counts',
+    '',
+    `- Components: ${componentCount}`,
+    `- Components with dynamic attrs: ${dynamicAttrCount}`,
+    `- Skill guides: ${skillCount}`,
+    `- Indexed resources: ${resourceCount}`,
+  ].join('\n');
+}
+
+const resourceDefinitions = [
+  {
+    uri: 'muibook://index',
+    name: 'knowledge-map.md',
+    title: 'Muibook Knowledge Map',
+    description: 'Front door explaining every knowledge surface and recommended routing.',
+    mimeType: 'text/markdown',
+    read: () => knowledgeMap || getKnowledgeSummary()
+  },
+  {
+    uri: 'muibook://mcp-instructions',
+    name: 'mcp-instructions.md',
+    title: 'Muibook MCP Instructions',
+    description: 'Short routing instructions for agents using the Muibook MCP.',
+    mimeType: 'text/markdown',
+    read: () => mcpInstructions || ''
+  },
+  {
+    uri: 'muibook://resources',
+    name: 'resource-index.json',
+    title: 'Resource Index',
+    description: 'Machine-readable index of knowledge resources and when to use them.',
+    mimeType: 'application/json',
+    read: () => asJsonText(resourceIndex)
+  },
+  {
+    uri: 'muibook://skills',
+    name: 'skill-index.json',
+    title: 'Skill Index',
+    description: 'Machine-readable index of authored skill guides.',
+    mimeType: 'application/json',
+    read: () => asJsonText(skillIndex)
+  },
+  {
+    uri: 'muibook://custom-elements',
+    name: 'custom-elements.json',
+    title: 'Custom Elements Manifest',
+    description: 'Full generated public component API metadata.',
+    mimeType: 'application/json',
+    read: () => asJsonText(customElements)
+  },
+  {
+    uri: 'muibook://dynamic-attrs',
+    name: 'dynamic-attrs.json',
+    title: 'Dynamic Attributes',
+    description: 'Runtime and destination-only attributes for integrations.',
+    mimeType: 'application/json',
+    read: () => asJsonText(dynamicAttrs)
+  },
+  {
+    uri: 'muibook://design',
+    name: 'DESIGN.md',
+    title: 'Design System',
+    description: 'Design language, tokens, surfaces, themes, spacing, typography, and layout guidance.',
+    mimeType: 'text/markdown',
+    read: () => designDocs || ''
+  },
+  {
+    uri: 'muibook://rules',
+    name: 'rules.ts',
+    title: 'Generation Rules',
+    description: 'Rules for generating valid Muibook component trees.',
+    mimeType: 'text/typescript',
+    read: () => rulesText || ''
+  },
+  {
+    uri: 'muibook://keywords',
+    name: 'keywords.ts',
+    title: 'Component Keywords',
+    description: 'Natural-language routing data for component discovery.',
+    mimeType: 'application/json',
+    read: () => asJsonText(keywordsData)
+  },
+  {
+    uri: 'muibook://compositions',
+    name: 'compositions.ts',
+    title: 'Compositions',
+    description: 'Curated component-tree examples.',
+    mimeType: 'application/json',
+    read: () => asJsonText(compositionsData)
+  }
+];
+
+function getResource(uri) {
+  return resourceDefinitions.find(resource => resource.uri === uri);
+}
+
 // --- JSON-RPC Message Handlers ---
 function handleMessage(message, respond, respondError) {
   const { jsonrpc, id, method, params } = message;
@@ -380,7 +529,9 @@ function handleMessage(message, respond, respondError) {
       return respond(id, {
         protocolVersion: "2024-11-05",
         capabilities: {
-          tools: {}
+          tools: {},
+          resources: {},
+          prompts: {}
         },
         serverInfo: {
           name: "muibook-knowledge-mcp",
@@ -398,8 +549,16 @@ function handleMessage(message, respond, respondError) {
       return respond(id, {
         tools: [
           {
+            name: "start_here",
+            description: "Start here for any Muibook task. Returns the knowledge map, available MCP surfaces, bundle counts, and recommended next tool calls.",
+            inputSchema: {
+              type: "object",
+              properties: {}
+            }
+          },
+          {
             name: "lookup_component",
-            description: "Look up full API details (attributes, slots, events, CSS custom properties, JS methods) and design system UX/a11y guidelines for a specific Muibook component.",
+            description: "Call before writing or reviewing markup for a known Muibook component. Returns full API details: attributes, slots, events, CSS custom properties, CSS parts, JS methods, and UX/a11y guidelines.",
             inputSchema: {
               type: "object",
               properties: {
@@ -413,7 +572,7 @@ function handleMessage(message, respond, respondError) {
           },
           {
             name: "find_component",
-            description: "Find matching Muibook components by searching natural-language keywords, synonyms, and functional intents.",
+            description: "Call when the user describes UI intent but does not name a component. Searches natural-language keywords, synonyms, and functional intents.",
             inputSchema: {
               type: "object",
               properties: {
@@ -507,6 +666,85 @@ function handleMessage(message, respond, respondError) {
         ]
       });
 
+    case "resources/list":
+      return respond(id, {
+        resources: resourceDefinitions.map(({ uri, name, title, description, mimeType }) => ({
+          uri,
+          name,
+          title,
+          description,
+          mimeType
+        }))
+      });
+
+    case "resources/read": {
+      const resource = getResource(params && params.uri);
+      if (!resource) {
+        return respondError(id, -32602, `Unknown resource: ${params && params.uri}`);
+      }
+      return respond(id, {
+        contents: [
+          {
+            uri: resource.uri,
+            mimeType: resource.mimeType,
+            text: resource.read()
+          }
+        ]
+      });
+    }
+
+    case "prompts/list":
+      return respond(id, {
+        prompts: [
+          {
+            name: "build_muibook_ui",
+            title: "Build Muibook UI",
+            description: "Use Muibook knowledge to choose components, inspect APIs, follow rules, and compose a UI."
+          },
+          {
+            name: "review_muibook_markup",
+            title: "Review Muibook Markup",
+            description: "Review Muibook HTML or component trees against public API, dynamic attrs, rules, and design guidance."
+          },
+          {
+            name: "style_web_component",
+            title: "Style Web Component",
+            description: "Use design tokens, surfaces, CSS vars, and parts to style Web Components without leaking internals."
+          },
+          {
+            name: "create_ux_guidelines",
+            title: "Create UX Guidelines",
+            description: "Create practical component guidelines with anatomy, accessibility, variants, rules, compositions, and asset publishing notes."
+          }
+        ]
+      });
+
+    case "prompts/get": {
+      const promptName = params && params.name;
+      const promptBodies = {
+        build_muibook_ui: "Use the Muibook MCP start_here tool first. Then use find_component for intent, lookup_component for each selected component, get_rules before generating component trees, and get_compositions for realistic structure.",
+        review_muibook_markup: "Use lookup_component for each Muibook component in the markup. Check public attrs against the CEM, dynamic/runtime attrs against get_dynamic_attrs, and generation constraints against get_rules.",
+        style_web_component: "Use get_design_system and the style-web-components skill. Prefer design tokens, semantic/component CSS variables, part maps, and targeted host/class overrides before shadow DOM reach-in.",
+        create_ux_guidelines: "Use the create-ux-guidelines skill. Cover usage, anatomy, accessibility, variants, rules, behavior, writing, compositions, and lightweight asset publishing."
+      };
+      const text = promptBodies[promptName];
+      if (!text) {
+        return respondError(id, -32602, `Unknown prompt: ${promptName}`);
+      }
+      return respond(id, {
+        description: promptName,
+        messages: [
+          {
+            role: "user",
+            content: {
+              type: "text",
+              text
+            }
+          }
+        ]
+      });
+    }
+
     case "tools/call":
       if (!params || !params.name) {
         return respondError(id, -32602, "Missing tool name parameter.");
@@ -521,6 +759,10 @@ function handleMessage(message, respond, respondError) {
 function handleToolCall(id, toolName, args, respond, respondError) {
   try {
     switch (toolName) {
+      case "start_here": {
+        return respond(id, { content: [{ type: "text", text: getKnowledgeSummary() }] });
+      }
+
       case "lookup_component": {
         const { name } = args;
         if (!name) {
