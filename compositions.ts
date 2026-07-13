@@ -41,7 +41,7 @@ export const compositions = {
                         props: {
                           text: "Start with your work email and a secure password.",
                           size: "small",
-                          variant: "optional",
+                          variant: "secondary",
                         },
                         children: [],
                       },
@@ -151,7 +151,7 @@ export const compositions = {
                   {
                     type: "Heading",
                     id: "title",
-                    props: { text: "Rewards", size: "4", level: "4" },
+                    props: { text: "Diamond Rewards", size: "4", level: "4" },
                     children: [],
                   },
                 ],
@@ -171,12 +171,11 @@ export const compositions = {
                         id: "smart-card",
                         props: {
                           inverted: true,
-                          "bg-image": "https://muibook.com/images/diamond.png",
-                          partner: "https://muibook.com/images/emerald.svg",
+                          "bg-image": "https://muibook.com/diamond.png",
+                          partner: "https://muibook.com/emerald.svg",
                           number: "1234",
-                          type: "Rewards",
-                          variant: "plain",
-                          state: "default",
+                          type: "Diamond",
+                          variant: "animated",
                         },
                         children: [],
                       },
@@ -319,7 +318,7 @@ export const compositions = {
                           {
                             type: "Body",
                             id: "metric_revenue_label",
-                            props: { text: "Revenue", size: "small", variant: "optional" },
+                            props: { text: "Revenue", size: "small", variant: "secondary" },
                             children: [],
                           },
                           {
@@ -338,7 +337,7 @@ export const compositions = {
                           {
                             type: "Body",
                             id: "metric_orders_label",
-                            props: { text: "Orders", size: "small", variant: "optional" },
+                            props: { text: "Orders", size: "small", variant: "secondary" },
                             children: [],
                           },
                           {
@@ -357,7 +356,7 @@ export const compositions = {
                           {
                             type: "Body",
                             id: "metric_conversion_label",
-                            props: { text: "Conversion", size: "small", variant: "optional" },
+                            props: { text: "Conversion", size: "small", variant: "secondary" },
                             children: [],
                           },
                           {
@@ -491,9 +490,12 @@ export const compositions = {
             id: "wallet_card",
             props: {
               variant: "animated",
-              partner: "Visa",
+              partner: "https://muibook.com/visa-black.svg",
               type: "Debit",
               number: "1234",
+              logo: "https://muibook.com/mui.svg",
+              "logo-height": "100",
+              "bg-image": "https://muibook.com/snowy-mint.png",
             },
             children: [],
           },
@@ -510,16 +512,16 @@ export const compositions = {
                   {
                     type: "TabBar",
                     id: "tab_bar",
-                    props: { inset: true, stroke: "none", radius: "500" },
+                    props: { inset: true, stroke: "none", "active-inset": true, radius: "500" },
                     children: [
-                      { type: "TabItem", id: "tab_item_tx", props: { active: true, text: "Transactions" }, children: [] },
-                      { type: "TabItem", id: "tab_item_st", props: { text: "Statements" }, children: [] },
+                      { type: "TabItem", id: "transactions", props: { active: true, text: "Transactions" }, children: [] },
+                      { type: "TabItem", id: "statements", props: { text: "Statements" }, children: [] },
                     ],
                   },
                   {
                     type: "TabPanel",
                     id: "panel_tx",
-                    props: { item: "tab_item_tx" },
+                    props: { item: "transactions" },
                     children: [
                       {
                         type: "SlatGroup",
@@ -532,15 +534,250 @@ export const compositions = {
                             props: { variant: "header" },
                             children: [
                               { type: "Heading", id: "tx_header_title", props: { text: "Today", size: "6" }, children: [] },
+                              { type: "Body", id: "tx_header_date", slot: "end", props: { text: "22 July 2025", size: "small" }, children: [] },
                             ],
                           },
                           {
                             type: "Slat",
-                            id: "tx_item_1",
+                            id: "palace_cinema",
                             props: { variant: "row", col: "1fr auto" },
                             children: [
-                              { type: "Avatar", id: "tx_item_1_icon", props: {}, children: [] },
-                              { type: "VStack", id: "tx_item_1_details", props: {}, children: [] },
+                              {
+                                type: "Avatar",
+                                id: "palace_icon",
+                                slot: "accessory", props: {},
+                                children: [{ type: "_Icon", id: "palace_icon_glyph", props: { icon: "mui-icon-movie-clapper", size: "small" }, children: [] }],
+                              },
+                              {
+                                type: "VStack",
+                                id: "palace_details",
+                                slot: "start", props: { space: "0" },
+                                children: [
+                                  { type: "Body", id: "palace_title", props: { text: "Palace Cinema", size: "medium", weight: "bold" }, children: [] },
+                                  { type: "Body", id: "palace_meta", props: { text: "Entertainment", size: "small" }, children: [] },
+                                ],
+                              },
+                              {
+                                type: "VStack",
+                                id: "palace_amount",
+                                slot: "end", props: { space: "0", alignX: "end" },
+                                children: [
+                                  { type: "Body", id: "palace_status", props: { text: "Pending", size: "small" }, children: [] },
+                                  { type: "Body", id: "palace_value", props: { text: "-$8.12", size: "small" }, children: [] },
+                                ],
+                              },
+                            ],
+                          },
+                          {
+                            type: "Slat",
+                            id: "app_store",
+                            props: { variant: "row", col: "1fr auto" },
+                            children: [
+                              {
+                                type: "Avatar",
+                                id: "app_store_icon",
+                                slot: "accessory", props: {},
+                                children: [{ type: "_Icon", id: "app_store_icon_glyph", props: { icon: "mui-icon-game-controller", size: "small" }, children: [] }],
+                              },
+                              {
+                                type: "VStack",
+                                id: "app_store_details",
+                                slot: "start", props: { space: "0" },
+                                children: [
+                                  { type: "Body", id: "app_store_title", props: { text: "Apple App Store", size: "medium", weight: "bold" }, children: [] },
+                                  { type: "Body", id: "app_store_meta", props: { text: "Entertainment", size: "small" }, children: [] },
+                                ],
+                              },
+                              {
+                                type: "VStack",
+                                id: "app_store_amount",
+                                slot: "end", props: { space: "0", alignX: "end" },
+                                children: [
+                                  { type: "Body", id: "app_store_status", props: { text: "Pending", size: "small" }, children: [] },
+                                  { type: "Body", id: "app_store_value", props: { text: "-$4.99", size: "small" }, children: [] },
+                                ],
+                              },
+                            ],
+                          },
+                          {
+                            type: "Slat",
+                            id: "tx_yesterday_header",
+                            props: { variant: "header" },
+                            children: [
+                              { type: "Heading", id: "tx_yesterday_title", props: { text: "Yesterday", size: "6" }, children: [] },
+                              { type: "Body", id: "tx_yesterday_date", slot: "end", props: { text: "21 July 2025", size: "small" }, children: [] },
+                            ],
+                          },
+                          {
+                            type: "Slat",
+                            id: "record_south_yarra",
+                            props: { variant: "row", col: "1fr auto" },
+                            children: [
+                              {
+                                type: "Avatar",
+                                id: "record_icon",
+                                slot: "accessory", props: {},
+                                children: [{ type: "_Icon", id: "record_icon_glyph", props: { icon: "mui-icon-music-microphone", size: "small" }, children: [] }],
+                              },
+                              {
+                                type: "VStack",
+                                id: "record_details",
+                                slot: "start", props: { space: "0" },
+                                children: [
+                                  { type: "Body", id: "record_title", props: { text: "Record South Yarra", size: "medium", weight: "bold" }, children: [] },
+                                  { type: "Body", id: "record_meta", props: { text: "Entertainment", size: "small" }, children: [] },
+                                ],
+                              },
+                              {
+                                type: "VStack",
+                                id: "record_amount",
+                                slot: "end", props: { space: "0", alignX: "end" },
+                                children: [
+                                  { type: "Body", id: "record_status", props: { text: "Pending", size: "small" }, children: [] },
+                                  { type: "Body", id: "record_value", props: { text: "-$26.89", size: "medium" }, children: [] },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    type: "TabPanel",
+                    id: "panel_statements",
+                    props: { item: "statements" },
+                    children: [
+                      {
+                        type: "SlatGroup",
+                        id: "statement_group",
+                        props: {},
+                        children: [
+                          {
+                            type: "Slat",
+                            id: "statement_recent_header",
+                            props: { variant: "header" },
+                            children: [{ type: "Heading", id: "statement_recent_title", props: { text: "Recents", size: "6" }, children: [] }],
+                          },
+                          {
+                            type: "Slat",
+                            id: "statement_report",
+                            props: { variant: "action" },
+                            children: [
+                              {
+                                type: "Avatar",
+                                id: "statement_report_icon",
+                                slot: "accessory", props: {},
+                                children: [{ type: "_Icon", id: "statement_report_glyph", props: { icon: "mui-icon-rectangle-media-text", size: "small" }, children: [] }],
+                              },
+                              {
+                                type: "VStack",
+                                id: "statement_report_copy",
+                                slot: "start", props: { space: "0" },
+                                children: [
+                                  { type: "Body", id: "statement_report_title", props: { text: "Transactions Report", size: "medium", weight: "bold" }, children: [] },
+                                  { type: "Body", id: "statement_report_meta", props: { text: "Generate a PDF", size: "small" }, children: [] },
+                                ],
+                              },
+                            ],
+                          },
+                          {
+                            type: "Slat",
+                            id: "statement_2025",
+                            props: { variant: "action" },
+                            children: [
+                              {
+                                type: "Avatar",
+                                id: "statement_2025_icon",
+                                slot: "accessory", props: {},
+                                children: [{ type: "_Icon", id: "statement_2025_glyph", props: { icon: "mui-icon-calendar", size: "small" }, children: [] }],
+                              },
+                              { type: "Body", id: "statement_2025_label", slot: "start", props: { text: "2025", size: "medium", weight: "bold" }, children: [] },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: "VStack",
+            id: "wallet_settings",
+            props: { alignX: "stretch", space: "var(--space-200)" },
+            children: [
+              { type: "Heading", id: "wallet_settings_title", props: { text: "Personalise Card", size: "3", level: "2" }, children: [] },
+              {
+                type: "Card",
+                id: "wallet_artwork_card",
+                props: { "data-group": "card-artwork" },
+                children: [
+                  {
+                    type: "CardBody",
+                    id: "wallet_artwork_body",
+                    props: { condensed: true },
+                    children: [
+                      {
+                        type: "Slat",
+                        id: "wallet_artwork_slat",
+                        props: { variant: "row", style: "grid-template-columns: 2fr auto; background: var(--app-wallet-slat-background, var(--slat-background));" },
+                        children: [
+                          {
+                            type: "VStack",
+                            id: "wallet_artwork_copy",
+                            slot: "start", props: { space: "0" },
+                            children: [
+                              { type: "Body", id: "wallet_artwork_title", props: { text: "Artwork", size: "medium", weight: "bold" }, children: [] },
+                              { type: "Body", id: "wallet_artwork_preferred_size", props: { text: "Preferred size: 395x248", size: "small", "data-preferred-size": true }, children: [] },
+                            ],
+                          },
+                          {
+                            type: "HStack",
+                            id: "wallet_artwork_actions",
+                            slot: "end", props: { space: "0", alignX: "end" },
+                            children: [
+                              { type: "Button", id: "wallet_artwork_reset", props: { text: "Reset", variant: "tertiary", "data-background-reset": true, style: "display: none;" }, children: [] },
+                              {
+                                type: "Dropdown",
+                                id: "wallet_artwork_dropdown",
+                                props: { "data-toggle-dropdown": "background", "data-file-preview": true, position: "center", class: "card-artwork" },
+                                children: [
+                                  {
+                                    type: "Button",
+                                    id: "wallet_artwork_action",
+                                    slot: "action", props: { variant: "tertiary", size: "small" },
+                                    children: [{ type: "_IconToggle", id: "wallet_artwork_toggle", props: { "data-toggle-control": "background", rotate: true, size: "small" }, children: [] }],
+                                  },
+                                  {
+                                    type: "VStack",
+                                    id: "wallet_artwork_menu",
+                                    props: { space: "var(--space-300)", style: "padding: var(--space-300) var(--space-500) var(--space-500) var(--space-500);" },
+                                    children: [
+                                      { type: "Heading", id: "wallet_artwork_preview_title", props: { text: "Preview", size: "3", level: "2" }, children: [] },
+                                      {
+                                        type: "SmartCard",
+                                        id: "wallet_artwork_preview",
+                                        props: {
+                                          type: "Debit",
+                                          number: "1234",
+                                          partner: "https://muibook.com/visa-black.svg",
+                                          logo: "https://muibook.com/image-220.png",
+                                          variant: "plain",
+                                        },
+                                        children: [],
+                                      },
+                                      {
+                                        type: "FileUpload",
+                                        id: "wallet_artwork_upload",
+                                        props: { acceptedFileTypes: ".pdf,.jpg,.png,.svg", currentFileName: "Upload Artwork" },
+                                        children: [],
+                                      },
+                                    ],
+                                  },
+                                ],
+                              },
                             ],
                           },
                         ],
@@ -1212,7 +1449,7 @@ export const compositions = {
                         id: "metric_revenue_stack",
                         props: { space: "var(--space-200)", alignX: "stretch" },
                         children: [
-                          { type: "Body", id: "metric_revenue_label", props: { text: "Monthly revenue", size: "small", variant: "optional" }, children: [] },
+                          { type: "Body", id: "metric_revenue_label", props: { text: "Monthly revenue", size: "small", variant: "secondary" }, children: [] },
                           { type: "Heading", id: "metric_revenue_value", props: { text: "$128.4K", size: "3", level: "2" }, children: [] },
                           { type: "Badge", id: "metric_revenue_delta", props: { text: "+12.8%", size: "small", variant: "positive" }, children: [] },
                         ],
@@ -1236,7 +1473,7 @@ export const compositions = {
                         id: "metric_accounts_stack",
                         props: { space: "var(--space-200)", alignX: "stretch" },
                         children: [
-                          { type: "Body", id: "metric_accounts_label", props: { text: "Active accounts", size: "small", variant: "optional" }, children: [] },
+                          { type: "Body", id: "metric_accounts_label", props: { text: "Active accounts", size: "small", variant: "secondary" }, children: [] },
                           { type: "Heading", id: "metric_accounts_value", props: { text: "24,892", size: "3", level: "2" }, children: [] },
                           { type: "Badge", id: "metric_accounts_delta", props: { text: "+4.2%", size: "small", variant: "positive" }, children: [] },
                         ],
@@ -1260,7 +1497,7 @@ export const compositions = {
                         id: "metric_conversion_stack",
                         props: { space: "var(--space-200)", alignX: "stretch" },
                         children: [
-                          { type: "Body", id: "metric_conversion_label", props: { text: "Trial conversion", size: "small", variant: "optional" }, children: [] },
+                          { type: "Body", id: "metric_conversion_label", props: { text: "Trial conversion", size: "small", variant: "secondary" }, children: [] },
                           { type: "Heading", id: "metric_conversion_value", props: { text: "8.6%", size: "3", level: "2" }, children: [] },
                           { type: "Badge", id: "metric_conversion_delta", props: { text: "-1.1%", size: "small", variant: "warning" }, children: [] },
                         ],
@@ -1284,7 +1521,7 @@ export const compositions = {
                         id: "metric_uptime_stack",
                         props: { space: "var(--space-200)", alignX: "stretch" },
                         children: [
-                          { type: "Body", id: "metric_uptime_label", props: { text: "Platform uptime", size: "small", variant: "optional" }, children: [] },
+                          { type: "Body", id: "metric_uptime_label", props: { text: "Platform uptime", size: "small", variant: "secondary" }, children: [] },
                           { type: "Heading", id: "metric_uptime_value", props: { text: "99.98%", size: "3", level: "2" }, children: [] },
                           { type: "Badge", id: "metric_uptime_delta", props: { text: "Stable", size: "small", variant: "neutral" }, children: [] },
                         ],
@@ -1311,7 +1548,7 @@ export const compositions = {
                     props: {},
                     children: [
                       { type: "Heading", id: "activation_health_title", props: { text: "Activation health", size: "3", level: "2" }, children: [] },
-                      { type: "Body", id: "activation_health_description", props: { text: "Performance across the last 30 days.", size: "small", variant: "optional" }, children: [] },
+                      { type: "Body", id: "activation_health_description", props: { text: "Performance across the last 30 days.", size: "small", variant: "secondary" }, children: [] },
                     ],
                   },
                   {
@@ -1396,7 +1633,7 @@ export const compositions = {
                                 slot: "start", props: { space: "var(--space-000)" },
                                 children: [
                                   { type: "Body", id: "billing_alerts_title", props: { text: "Review billing alerts", size: "small", weight: "bold" }, children: [] },
-                                  { type: "Body", id: "billing_alerts_meta", props: { text: "Finance operations", size: "x-small", variant: "optional" }, children: [] },
+                                  { type: "Body", id: "billing_alerts_meta", props: { text: "Finance operations", size: "x-small", variant: "secondary" }, children: [] },
                                 ],
                               },
                               { type: "Badge", id: "billing_alerts_badge", slot: "end", props: { text: "Urgent", size: "x-small", variant: "attention" }, children: [] },
@@ -1413,7 +1650,7 @@ export const compositions = {
                                 slot: "start", props: { space: "var(--space-000)" },
                                 children: [
                                   { type: "Body", id: "campaign_title", props: { text: "Approve campaign launch", size: "small", weight: "bold" }, children: [] },
-                                  { type: "Body", id: "campaign_meta", props: { text: "Growth team", size: "x-small", variant: "optional" }, children: [] },
+                                  { type: "Body", id: "campaign_meta", props: { text: "Growth team", size: "x-small", variant: "secondary" }, children: [] },
                                 ],
                               },
                               { type: "Badge", id: "campaign_badge", slot: "end", props: { text: "Pending", size: "x-small", variant: "warning" }, children: [] },
@@ -1503,7 +1740,7 @@ export const compositions = {
                                 slot: "start", props: { space: "var(--space-000)" },
                                 children: [
                                   { type: "Body", id: "activity_mobile_acme_title", props: { text: "Acme Studios", size: "small", weight: "bold" }, children: [] },
-                                  { type: "Body", id: "activity_mobile_acme_meta", props: { text: "Renewal payment", size: "x-small", variant: "optional" }, children: [] },
+                                  { type: "Body", id: "activity_mobile_acme_meta", props: { text: "Renewal payment", size: "x-small", variant: "secondary" }, children: [] },
                                 ],
                               },
                               { type: "Badge", id: "activity_mobile_acme_status", slot: "end", props: { text: "Paid", size: "x-small", variant: "positive" }, children: [] },
@@ -1519,7 +1756,93 @@ export const compositions = {
           },
         ],
       },
+      agentChat: {
+        type: "VStack",
+        id: "agent_chat_root",
+        props: { space: "var(--space-600)", alignX: "stretch", style: "max-width: 78rem; margin: 0 auto;" },
+        children: [
+          {
+            type: "ChatMessage",
+            id: "agent_chat_user_message",
+            props: { align: "end", width: "medium", "footer-position": "outside" },
+            children: [
+              { type: "Body", id: "agent_chat_user_copy", props: { text: "Review this implementation and summarise the changed files.", size: "medium" }, children: [] },
+            ],
+          },
+          {
+            type: "ChatMessage",
+            id: "agent_chat_response",
+            props: { variant: "ghost", size: "medium" },
+            children: [
+              {
+                type: "WorkLog",
+                id: "agent_chat_work_log",
+                slot: "header",
+                props: { label: "Worked for 4m 10s", rule: true },
+                children: [
+                  { type: "Body", id: "agent_chat_work_summary", props: { text: "Reviewed the component APIs, composition, and generated documentation.", size: "x-small" }, children: [] },
+                ],
+              },
+              { type: "Heading", id: "agent_chat_response_title", props: { text: "Updated the implementation and documentation.", level: "2", size: "6" }, children: [] },
+              { type: "Body", id: "agent_chat_response_copy", props: { text: "The response keeps work detail, reviewable output, and follow-up context within one document flow.", size: "small" }, children: [] },
+              {
+                type: "ResultBar",
+                id: "agent_chat_result",
+                props: { variant: "accordion", label: "Edited 4 files", rule: true, open: true },
+                children: [
+                  { type: "Button", id: "agent_chat_undo", slot: "actions", props: { text: "Undo", variant: "tertiary", size: "x-small" }, children: [] },
+                  { type: "Button", id: "agent_chat_review", slot: "actions", props: { text: "Review", variant: "secondary", size: "x-small" }, children: [] },
+                ],
+              },
+            ],
+          },
+          {
+            type: "Prompt",
+            id: "agent_chat_prompt",
+            props: { placeholder: "Ask for follow-up changes...", "enter-submit": true, "context-mode": "icon", "actions-fan": true },
+            children: [
+              { type: "PreviewChip", id: "agent_chat_preview", slot: "preview", props: { value: "Review the agent chat response", badge: "MD", clickable: true }, children: [] },
+              {
+                type: "ContextBar",
+                id: "agent_chat_context",
+                slot: "context",
+                props: {},
+                children: [
+                  { type: "Body", id: "agent_chat_context_copy", props: { text: "Keep the current implementation scope", size: "x-small" }, children: [] },
+                ],
+              },
+              {
+                type: "ActionToggle",
+                id: "agent_chat_web_toggle",
+                slot: "actions",
+                props: {},
+                children: [
+                  { type: "Button", id: "agent_chat_web_action", props: { "context-toggle": true, variant: "tertiary", "icon-only": true, "aria-label": "Toggle web context" }, children: [] },
+                  { type: "Chip", id: "agent_chat_web_chip", props: { "context-chip": true, dismiss: true, hidden: true, text: "Web" }, children: [] },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     } as const;
+
+export const compositionStories = {
+  agentChat: {
+    title: "Agent Chat",
+    description: "Composition example for an agent chat surface with response content, generated previews, work detail, reviewable results, and a prompt composer.",
+    github: "https://github.com/michaeltrilford/muibook/blob/main/src/muibook/story/compositions/agent-chat/index.js",
+    storybook: "https://storybook.muibook.com/?path=/story/compositions-agent-chat--agent-chat",
+    stories: {
+      items: [
+        { key: "agent-chat", title: "Agent Chat", description: "A complete chat layout composed from message framing, work detail, reviewable output, previews, and prompt controls.", list: ["Use Chat Message for user and agent turns.", "Use Work Log for collapsible execution detail and Result Bar for reviewable output.", "Keep response content as normal document structure so it can contain headings, paragraphs, lists, code, previews, and controls."] },
+        { key: "steer", title: "Steer", description: "Keeps compact, editable task context attached to the follow-up composer.", list: ["Use the Prompt context slot for task context, selected text, constraints, examples, or attachments.", "Keep the context row compact and truncated.", "Use Action Toggle for application-controlled context state such as Web, Files, or Canvas."] },
+        { key: "thinking", title: "Thinking", description: "Shows an agent response while only the top-level work status is available.", list: ["Use pending on Work Log for active thinking states.", "Omit rule when the status should remain a quiet top-level indicator."] },
+        { key: "working", title: "Working", description: "Shows nested execution detail such as elapsed work, files read, and active updates.", list: ["Nest Work Log rows for secondary execution detail.", "Use pending only on work that is still active.", "Keep nested rows compact so the response remains the primary content."] },
+      ],
+    },
+  },
+} as const;
 
 export const compositionConfig = {
   signupFlow: { includeInAgent: true, detail: "compact" },
@@ -1535,6 +1858,7 @@ export const compositionConfig = {
   drawerWorkspace: { includeInAgent: false, detail: "full" },
   modelViewerProductPreview: { includeInAgent: false, detail: "full" },
   dashboard: { includeInAgent: false, detail: "full" },
+  agentChat: { includeInAgent: true, detail: "full" },
 } satisfies Record<keyof typeof compositions, { includeInAgent: boolean; detail: "compact" | "full" }>;
 
 type CompositionKey = keyof typeof compositions;

@@ -125,7 +125,30 @@ Keep the component's public surface small, documented, and stable.
 - Do not expose internal runtime attrs as public API.
 - Exported or builder-consumed HTML should include only public API attrs.
 
+### Documentation Structure (`doc.ts`)
+
+When writing or reviewing UX guidance in `doc.ts`, classify examples and behavior correctly:
+
+- **variants**: Named visual/design choices shown in UX guidelines. These are usually image-led.
+- **stories**: Live/story examples, usage groups, behaviors, sizes, color demos, and implementation-facing guidance.
+- **compositions**: Component used inside a larger UI. Usually multi-component, closer to a page, card, or full flow (e.g., onboarding form, promo card, settings drawer, dialog footer).
+
 When a component needs a behavior that is only relevant to an exporter, builder, or destination component, document it as a dynamic attr instead of mixing it into the public API.
+
+### Reusable Story Metadata
+
+Treat `doc.ts` as the source of truth for descriptive story metadata that should be shared across documentation experiences.
+
+- Add an ordered `stories.items` collection containing a stable `key`, `title`, optional `description`, and a `list` of usage details.
+- Keep the key aligned with the rendered story id so quicklinks, deep links, and external renderers can address the same example.
+- Generate `custom-elements.json` after changing story metadata. The CEM is the transport layer consumed by Muibook, Storybook-style documentation, and other component explorers.
+- In the Muibook storefront, load the component docs from the CEM, map each story record by key, and use the ordered collection to build quicklinks. Join `list` only at the renderer boundary when a local component requires a delimited string.
+- Do not duplicate titles, descriptions, or usage guidance in the story implementation. Duplicated fallback copy hides stale CEM output and allows documentation surfaces to drift.
+- Render the shared story-metadata empty state when metadata is unavailable. The empty state should tell maintainers to regenerate the CEM rather than silently using embedded fallback content.
+- Keep executable story markup, imported assets, event handlers, controls, and framework-specific parameters in the local renderer. The CEM record describes the example; it does not own its runtime implementation.
+- A Storybook-style renderer should read the same ordered records and adapt them into story titles, descriptions, docs blocks, and navigation without changing the source metadata.
+
+This separation allows one authored story description to remain consistent while Muibook, Storybook, tests, and future documentation tools render it using their own component and interaction primitives.
 
 ## Knowledge Bundle
 
@@ -182,6 +205,7 @@ Use contained component styles first and token-led customization second.
 - Use component tokens for repeated component decisions and semantic tokens for meaning.
 - Preserve light and dark theme meaning rather than hardcoding one-off colors.
 - Use CSS-first layout behavior when stable results can be achieved without runtime attributes.
+- Apply `box-sizing: border-box` whenever component CSS adds padding or borders to an element with constrained width or height. Parent components should own shared inset spacing for composed children; avoid story-only padding fixes that unexpectedly change control dimensions.
 
 Good component styling is predictable, contained, theme-aware, and overrideable only through intentional surfaces.
 
@@ -287,7 +311,7 @@ Common dynamic attr families in this codebase include:
 
 - Slot presence and affordance state: `has-before`, `has-after`, `has-actions`, `has-extra-actions`, `has-message`, `has-rule`, `has-header`, `has-footer`, `has-notes`.
 - Content-shape state: `icon-only`, `avatar-only`, `has-video`, `has-avatar-chip`, `has-error`, `has-chrome`.
-- Destination context attrs: `card-slot`, `condensed-slot`, `dropdown-slot`, `dropdown-slot-first`, `dropdown-slot-last`, `alert-slot`, `alert-positive-slot`, `alert-info-slot`, `alert-warning-slot`, `alert-attention-slot`.
+- Destination context attrs: `card-slot`, `condensed-slot`, `menu-slot`, `menu-slot-first`, `menu-slot-last`, `alert-slot`, `alert-positive-slot`, `alert-info-slot`, `alert-warning-slot`, `alert-attention-slot`.
 - Layout/container context attrs: `in-card`, `in-form-section`, `in-dialog`, `in-drawer`, `usage`, `first-child`, `last-child`.
 - Presentation/runtime attrs: `notes-visible`, `data-slide-section`, `slide-active`, `slide-hidden`, `inner-space-top`.
 

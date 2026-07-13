@@ -9,7 +9,7 @@ Use this map as the front door for the Muibook knowledge bundle. The bundle is s
 - `DESIGN.md`: design language, token architecture, surface usage, theme layers, typography, spacing, radius, and layout guidance.
 - `rules.ts`: global rules for generating valid Muibook component trees.
 - `keywords.ts`: natural-language routing from user intent to likely components.
-- `compositions.ts`: curated component-tree examples for realistic layouts and workflows.
+- `compositions.ts`: curated component-tree examples plus reusable composition-page story metadata for realistic layouts and workflows.
 - `resource-index.json`: machine-readable index of the knowledge files and when to use them.
 - `skill-index.json`: machine-readable index of authored skill guides.
 - `*-skill.md`: portable instruction files for creating, composing, styling, and documenting Web Components.
@@ -30,6 +30,7 @@ Use this map as the front door for the Muibook knowledge bundle. The bundle is s
 
 - Do not treat dynamic attrs as normal public props. They are structural integration metadata.
 - Do not use story prop panels as the source of truth for public component API. Use component `api.ts`, `doc.ts`, and the generated CEM.
+- Use ordered `doc.ts` `stories.items` as the shared source for story titles, descriptions, usage guidance, and navigation across Muibook and Storybook-style renderers. Keep executable examples local to each renderer and show a rebuild empty state instead of duplicated metadata fallbacks.
 - Do not load the full CEM by default when a compact index or component lookup will answer the question.
 - Do not invent token escape hatches. Prefer existing foundation, theme, semantic, and component token layers.
 - Do not re-own Web Component behavior inside framework wrappers. Wrappers should pass attributes, events, refs, and host properties through.
