@@ -717,7 +717,7 @@ export const compositions = {
                   {
                     type: "CardBody",
                     id: "wallet_artwork_body",
-                    props: { condensed: true },
+                    props: { size: "none" },
                     children: [
                       {
                         type: "Slat",
@@ -1094,7 +1094,7 @@ export const compositions = {
             id: "song_header",
             props: { alignX: "space-between", alignY: "center", style: "margin-block-end: var(--space-500);" },
             children: [
-              { type: "Heading", id: "logo", props: { text: "SoundAmp", size: "3" }, children: [] },
+              { type: "Heading", id: "logo", props: { text: "Amp", size: "3" }, children: [] },
               {
                 type: "Dropdown",
                 id: "account_dropdown",
