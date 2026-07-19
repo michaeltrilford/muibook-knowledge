@@ -73,32 +73,7 @@ let knowledgeMap = '';
 let mcpInstructions = '';
 let resourceIndex = {};
 let skillIndex = {};
-const skillGuideDefinitions = [
-  {
-    id: 'create-web-components',
-    file: 'create-web-components-skill.md',
-    title: 'Create Web Components',
-    description: 'Build framework-agnostic native Web Components using explicit APIs, shadow DOM, slots, tokens, metadata, and knowledge exports.'
-  },
-  {
-    id: 'compose-web-components',
-    file: 'compose-web-components-skill.md',
-    title: 'Compose Web Components',
-    description: 'Compose Muibook Web Components into complete layouts using declarative HTML, layout primitives, native slots, and parent-child context.'
-  },
-  {
-    id: 'style-web-components',
-    file: 'style-web-components-skill.md',
-    title: 'Style Web Components',
-    description: 'Theme Muibook components with CSS variables, semantic/component tokens, and data-theme/data-brand attributes.'
-  },
-  {
-    id: 'create-ux-guidelines',
-    file: 'create-ux-guidelines-skill.md',
-    title: 'Create UX Guidelines',
-    description: 'Write practical component UX guidelines for usage, accessibility, anatomy, variants, rules, behavior, writing, and compositions.'
-  }
-];
+let skillGuideDefinitions = [];
 const skillGuides = {};
 
 // 1. Load custom-elements.json
@@ -189,6 +164,13 @@ loadSection('knowledge front door', () => {
   const skillIndexPath = path.join(__dirname, 'skill-index.json');
   if (fs.existsSync(skillIndexPath)) {
     skillIndex = JSON.parse(fs.readFileSync(skillIndexPath, 'utf8'));
+    skillGuideDefinitions = (skillIndex.skills || []).map((guide) => ({
+      id: guide.id,
+      file: guide.file,
+      title: guide.title,
+      description: guide.useWhen || guide.description || '',
+      aliases: guide.aliases || []
+    }));
   }
 });
 
@@ -643,7 +625,7 @@ function handleMessage(message, respond, respondError) {
               properties: {
                 id: {
                   type: "string",
-                  description: "Guide id or filename, e.g. 'create-web-components' or 'create-web-components-skill.md'."
+                  description: "Guide id or nested SKILL.md path, e.g. 'create-web-components' or 'skills/create-web-components/SKILL.md'."
                 }
               },
               required: ["id"]
@@ -867,6 +849,7 @@ function handleToolCall(id, toolName, args, respond, respondError) {
         const cleanId = requestedId.toLowerCase().trim().replace(/\.md$/, '').replace(/-skill$/, '');
         const guide = skillGuides[cleanId] ||
           Object.values(skillGuides).find(item =>
+            (item.aliases || []).some(alias => alias.toLowerCase() === cleanId) ||
             item.file.toLowerCase() === requestedId.toLowerCase().trim() ||
             item.file.toLowerCase().replace(/\.md$/, '') === requestedId.toLowerCase().trim()
           );
