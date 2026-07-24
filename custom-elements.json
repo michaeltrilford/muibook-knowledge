@@ -28,6 +28,74 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/mui-action-toggle/doc.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "muiDocs",
+          "type": {
+            "text": "MuiDocs"
+          },
+          "default": "{ ActionToggle: { title: \"Action Toggle\", description: \"Action Toggle switches between compact prompt actions and expanded active content inside Prompt.\", hero: [\"\"], figma: [\"https://www.figma.com/design/l0mt1lXu97XoHJCEdnrWLp/Mui-Design-System?node-id=2117-17601&t=P2Vr2JDCBlI425XD-1\"], storybook: [\"https://stories.muibook.com/?path=/docs/ai-llm-action-toggle--docs\"], github: [\"https://github.com/michaeltrilford/muibook/blob/main/src/components/mui-action-toggle/index.ts\"], website: [\"https://muibook.com/action-toggle\"], guides: [\"https://guides.muibook.com/prompt\"], usage: { list: [ \"Use inside mui-prompt when a compact action needs to expand into an active state, chip state, spinner, or close action.\", \"Use mode='icon' for the collapsed trigger state and mode='chip' for the expanded active state.\", \"Slot toggle content for the collapsed action and active or chip content for the expanded state.\", \"This pattern works well for context selectors, source pickers, tool toggles, or lightweight prompt-side dropdown triggers.\", \"Pair with Dropdown when the expanded state needs to reveal additional actions or menu choices.\", \"Use close or active controls when the expanded state should be dismissible without clearing the entire prompt.\", ], }, accessibility: { designerList: [ \"Keep the compact and expanded states visually related so users understand they represent the same prompt action.\", \"Use clear affordances for close or dismiss actions when expanded state can be exited independently.\", ], engineerList: [ \"Treat Action Toggle as a display-mode switcher; app state should still own the action, context, and dismissal logic.\", \"Ensure slotted toggle and active controls expose their own accessible labels when they are icon-only.\", ], }, anatomy: { image: \"\", list: [\"Collapsed toggle content\", \"Expanded active or chip content\", \"Optional close or spinner content\"], }, variants: { items: [ { key: \"icon\", title: \"Icon\", description: \"Collapsed state showing the prompt action trigger.\", image: \"\", }, { key: \"chip\", title: \"Chip\", description: \"Expanded or active state showing the selected context, dismiss action, or loading state.\", image: \"\", }, ], }, stories: { items: [ { key: \"recommended-prompt\", title: \"Recommended Prompt Composition\", list: [\"Use mui-action-toggle only in slot='actions'.\", \"Prompt includes a default submit control in actions-right; override only when needed.\", \"Wire submit and context events from the parent mui-prompt.\"] }, { key: \"toggle-private\", title: \"Private Mode\", list: [\"Toggle into a private-mode chip and dismiss to return to icon mode.\"] }, { key: \"toggle-chip\", title: \"Button to Chip\", list: [\"Swap an icon action to a contextual chip state, then dismiss back.\"] }, { key: \"toggle-input\", title: \"Button to Input\", list: [\"Toggle into an input action with a close fallback.\"] }, { key: \"toggle-spinner\", title: \"Button to Spinner\", list: [\"Toggle into a spinner action with a Stop button.\"] }, { key: \"toggle-button\", title: \"Button to Button\", list: [\"Toggle to a custom action group, then close.\"] }, { key: \"toggle-calendar\", title: \"Button to Calendar\", list: [\"Toggle from a calendar icon into date-range actions with a close fallback.\", \"Selecting a range updates the Prompt value.\"] }, { key: \"toggle-dropdown\", title: \"Accessibility Tools\", list: [\"Toggle into accessibility controls and close back to icon mode.\", \"Menu actions apply live Prompt settings.\"] }, ] }, compositions: { description: \"Showcases prompt-side action patterns that transform from compact controls into richer active states.\", items: [ { key: \"context-toggle\", name: \"Prompt Context Toggle\", description: \"A compact prompt action that expands into an active chip with dismiss or close behavior.\", image: \"\", }, ], }, related: { items: [ { name: \"Prompt\", link: \"https://guides.muibook.com/prompt\" }, { name: \"Dropdown\", link: \"https://guides.muibook.com/dropdown\" }, { name: \"Button\", link: \"https://guides.muibook.com/button\" }, ], }, rules: [ { heading: \"Use for stateful prompt actions\", description: \"Action Toggle is for prompt actions that need a compact state and a richer active state in the same position.\", doContent: [ { description: \"Use it for context, source, or tool actions that start as a small trigger and then become an active chip, dropdown launcher, or dismissible action.\", image: \"\", }, ], dontContent: [ { description: \"Do not use it for static prompt actions that never change shape or state.\", image: \"\", }, ], }, ], behaviour: { list: [ \"mode='icon' shows toggle content and hides active, chip, close, and spinner content.\", \"mode='chip' shows active, chip, close, and spinner content and hides the compact toggle content.\", \"Action Toggle reacts to slotted content marked with slot names or context-* attributes so composed prompt actions can be shown or hidden consistently.\", ], }, writing: { list: [ \"Use short labels so the expanded chip or active state stays compact inside the prompt action rail.\", ], }, }, }"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "muiDocs",
+          "declaration": {
+            "name": "muiDocs",
+            "module": "src/components/mui-action-toggle/doc.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mui-action-toggle/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Switches a prompt action between its compact trigger and expanded active content.",
+          "name": "MuiActionToggle",
+          "attributes": [
+            {
+              "name": "mode",
+              "type": {
+                "text": "\"icon\" | \"chip\""
+              },
+              "default": "icon",
+              "description": "Shows collapsed trigger content in icon mode and active, chip, close, or spinner content in chip mode."
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "mui-action-toggle",
+          "customElement": true,
+          "slots": [
+            {
+              "name": "",
+              "description": "Prompt action controls marked with `context-toggle`, `context-active`, `context-chip`, `context-close`, or `context-spinner`."
+            }
+          ],
+          "events": [],
+          "cssProperties": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "mui-action-toggle",
+          "declaration": {
+            "name": "MuiActionToggle",
+            "module": "src/components/mui-action-toggle/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/mui-addon/doc.ts",
       "declarations": [
         {
@@ -102,74 +170,6 @@
           "declaration": {
             "name": "MuiAddon",
             "module": "src/components/mui-addon/index.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/mui-action-toggle/doc.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "muiDocs",
-          "type": {
-            "text": "MuiDocs"
-          },
-          "default": "{ ActionToggle: { title: \"Action Toggle\", description: \"Action Toggle switches between compact prompt actions and expanded active content inside Prompt.\", hero: [\"\"], figma: [\"https://www.figma.com/design/l0mt1lXu97XoHJCEdnrWLp/Mui-Design-System?node-id=2117-17601&t=P2Vr2JDCBlI425XD-1\"], storybook: [\"https://stories.muibook.com/?path=/docs/ai-llm-action-toggle--docs\"], github: [\"https://github.com/michaeltrilford/muibook/blob/main/src/components/mui-action-toggle/index.ts\"], website: [\"https://muibook.com/action-toggle\"], guides: [\"https://guides.muibook.com/prompt\"], usage: { list: [ \"Use inside mui-prompt when a compact action needs to expand into an active state, chip state, spinner, or close action.\", \"Use mode='icon' for the collapsed trigger state and mode='chip' for the expanded active state.\", \"Slot toggle content for the collapsed action and active or chip content for the expanded state.\", \"This pattern works well for context selectors, source pickers, tool toggles, or lightweight prompt-side dropdown triggers.\", \"Pair with Dropdown when the expanded state needs to reveal additional actions or menu choices.\", \"Use close or active controls when the expanded state should be dismissible without clearing the entire prompt.\", ], }, accessibility: { designerList: [ \"Keep the compact and expanded states visually related so users understand they represent the same prompt action.\", \"Use clear affordances for close or dismiss actions when expanded state can be exited independently.\", ], engineerList: [ \"Treat Action Toggle as a display-mode switcher; app state should still own the action, context, and dismissal logic.\", \"Ensure slotted toggle and active controls expose their own accessible labels when they are icon-only.\", ], }, anatomy: { image: \"\", list: [\"Collapsed toggle content\", \"Expanded active or chip content\", \"Optional close or spinner content\"], }, variants: { items: [ { key: \"icon\", title: \"Icon\", description: \"Collapsed state showing the prompt action trigger.\", image: \"\", }, { key: \"chip\", title: \"Chip\", description: \"Expanded or active state showing the selected context, dismiss action, or loading state.\", image: \"\", }, ], }, stories: { items: [ { key: \"recommended-prompt\", title: \"Recommended Prompt Composition\", list: [\"Use mui-action-toggle only in slot='actions'.\", \"Prompt includes a default submit control in actions-right; override only when needed.\", \"Wire submit and context events from the parent mui-prompt.\"] }, { key: \"toggle-private\", title: \"Private Mode\", list: [\"Toggle into a private-mode chip and dismiss to return to icon mode.\"] }, { key: \"toggle-chip\", title: \"Button to Chip\", list: [\"Swap an icon action to a contextual chip state, then dismiss back.\"] }, { key: \"toggle-input\", title: \"Button to Input\", list: [\"Toggle into an input action with a close fallback.\"] }, { key: \"toggle-spinner\", title: \"Button to Spinner\", list: [\"Toggle into a spinner action with a Stop button.\"] }, { key: \"toggle-button\", title: \"Button to Button\", list: [\"Toggle to a custom action group, then close.\"] }, { key: \"toggle-calendar\", title: \"Button to Calendar\", list: [\"Toggle from a calendar icon into date-range actions with a close fallback.\", \"Selecting a range updates the Prompt value.\"] }, { key: \"toggle-dropdown\", title: \"Accessibility Tools\", list: [\"Toggle into accessibility controls and close back to icon mode.\", \"Menu actions apply live Prompt settings.\"] }, ] }, compositions: { description: \"Showcases prompt-side action patterns that transform from compact controls into richer active states.\", items: [ { key: \"context-toggle\", name: \"Prompt Context Toggle\", description: \"A compact prompt action that expands into an active chip with dismiss or close behavior.\", image: \"\", }, ], }, related: { items: [ { name: \"Prompt\", link: \"https://guides.muibook.com/prompt\" }, { name: \"Dropdown\", link: \"https://guides.muibook.com/dropdown\" }, { name: \"Button\", link: \"https://guides.muibook.com/button\" }, ], }, rules: [ { heading: \"Use for stateful prompt actions\", description: \"Action Toggle is for prompt actions that need a compact state and a richer active state in the same position.\", doContent: [ { description: \"Use it for context, source, or tool actions that start as a small trigger and then become an active chip, dropdown launcher, or dismissible action.\", image: \"\", }, ], dontContent: [ { description: \"Do not use it for static prompt actions that never change shape or state.\", image: \"\", }, ], }, ], behaviour: { list: [ \"mode='icon' shows toggle content and hides active, chip, close, and spinner content.\", \"mode='chip' shows active, chip, close, and spinner content and hides the compact toggle content.\", \"Action Toggle reacts to slotted content marked with slot names or context-* attributes so composed prompt actions can be shown or hidden consistently.\", ], }, writing: { list: [ \"Use short labels so the expanded chip or active state stays compact inside the prompt action rail.\", ], }, }, }"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "muiDocs",
-          "declaration": {
-            "name": "muiDocs",
-            "module": "src/components/mui-action-toggle/doc.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/mui-action-toggle/index.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Switches a prompt action between its compact trigger and expanded active content.",
-          "name": "MuiActionToggle",
-          "attributes": [
-            {
-              "name": "mode",
-              "type": {
-                "text": "\"icon\" | \"chip\""
-              },
-              "default": "icon",
-              "description": "Shows collapsed trigger content in icon mode and active, chip, close, or spinner content in chip mode."
-            }
-          ],
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "tagName": "mui-action-toggle",
-          "customElement": true,
-          "slots": [
-            {
-              "name": "",
-              "description": "Prompt action controls marked with `context-toggle`, `context-active`, `context-chip`, `context-close`, or `context-spinner`."
-            }
-          ],
-          "events": [],
-          "cssProperties": []
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "mui-action-toggle",
-          "declaration": {
-            "name": "MuiActionToggle",
-            "module": "src/components/mui-action-toggle/index.ts"
           }
         }
       ]
@@ -5615,6 +5615,138 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/mui-image/doc.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "muiDocs",
+          "type": {
+            "text": "MuiDocs"
+          },
+          "default": "{ Image: { namedSlots: { description: \"Use these names on items slotted inside this component.\", list: [\"image\",\"caption\"], }, title: \"Image\", description: \"Displays an image alongside an optional caption to provide context, explanation, or attribution. Useful for supporting content visually while maintaining clarity through descriptive labelling.\", hero: [ \"https://images.ctfassets.net/i5uwscj4pkk2/14eozXMPlzipgAfqaIR2Py/4e211990a30b4a08549deccfd30c71a9/Image_-_Home_Image.png\", ], figma: [ \"https://www.figma.com/design/l0mt1lXu97XoHJCEdnrWLp/Mui-Design-System?node-id=948-4194&t=0ytskb8cxriEmdz2-1\", ], storybook: [\"https://stories.muibook.com/?path=/docs/media-image--docs\"], github: [\"https://github.com/michaeltrilford/muibook/blob/main/src/components/mui-image/index.ts\"], website: [\"https://muibook.com/image\"], guides: [\"https://guides.muibook.com/image\"], usage: { list: [ \"Use to display images that require additional context or explanation.\", \"Use height + crop + fit=cover when you need fixed-height visual crops.\", \"Use max-height with aspect-ratio for responsive image frames that should not exceed a visual cap.\", \"Use focal-x/focal-y or position to keep important content in frame.\", \"Use zoom carefully to tighten framing without switching to background-image.\", \"Captions should clarify the relevance of the image, not repeat surrounding content.\", \"Ideal for diagrams, UI examples, or content requiring attribution.\", \"Ensure images are accessible with alt text and meaningful captions.\", ], }, accessibility: { designerList: [ \"Use meaningful alt text that describes the image’s purpose.\", \"Use alt=&#8220;&#8221; for decorative images that don’t convey information.\", \"Use the caption slot for extended context, especially for diagrams or UI patterns.\", ], engineerList: [ \"Use meaningful alt text that describes the image’s purpose.\", \"Use alt=&#8220;&#8221; for decorative images that don’t convey information.\", \"Use the caption slot for extended context, especially for diagrams or UI patterns.\", ], }, anatomy: { image: \"https://images.ctfassets.net/i5uwscj4pkk2/3BSbMl1cqUOB6oDmFLQjRx/193889c0f6d3da6178d51e5fff06b8ed/Image_-_Anatomy.png\", list: [\"Standard styling for a hero image.\", \"Optional caption for the image.\"], }, variants: { items: [ { key: \"\", title: \"\", description: \"\", image: \"\", }, ], }, stories: { items: [ { \"key\": \"single-image\", \"title\": \"Single image\", \"description\": \"Renders a responsive image with accessible alternative text.\", \"list\": [ \"Use meaningful alt text unless the image is purely decorative.\" ] }, { \"key\": \"image-with-caption\", \"title\": \"Image with caption\", \"description\": \"Associates supporting caption text with the image.\", \"list\": [ \"Use captions for context that is useful beyond the alternative text.\" ] }, { \"key\": \"cropped-height\", \"title\": \"Cropped Height\", \"description\": \"Crops an image to a constrained height.\", \"list\": [ \"Use object positioning to keep the important subject visible.\" ] }, { \"key\": \"cropped-centered\", \"title\": \"Cropped Centered\", \"description\": \"Centers the subject within a cropped image frame.\", \"list\": [ \"Use when the source composition supports central cropping.\" ] }, { \"key\": \"zoom-aspect-ratio\", \"title\": \"Zoom + Aspect Ratio\", \"description\": \"Combines a stable aspect ratio with image zoom.\", \"list\": [ \"Use a fixed ratio to prevent layout shift and zoom only when inspection is useful.\" ] } ], }, compositions: { description: \"Showcases actual use cases, demonstrating how the component fits into real-world UI scenarios.\", items: [ { key: \"muibook-resource\", name: \"Muibook Resource\", description: \"The Muibook documentation site uses MUI components to compose its layout, including headings, text, lists, buttons, icons, and image components.\", image: \"https://images.ctfassets.net/i5uwscj4pkk2/3LVvuYDZWRnMhxNy6GMLNd/c5074a05eacb2c22c50ea172b3567c48/Muibook-List-Composition.png\", }, ], }, related: { items: [ { name: \"\", link: \"\", }, ], }, rules: [ { heading: \"\", description: \"\", doContent: [{ description: \"\", image: \"\" }], dontContent: [{ description: \"\", image: \"\" }], }, ], behaviour: { list: [\"\"], }, writing: { list: [\"\"], }, }, }"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "muiDocs",
+          "declaration": {
+            "name": "muiDocs",
+            "module": "src/components/mui-image/doc.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mui-image/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Frames a slotted image with optional cropping, focal positioning and caption content.",
+          "name": "MuiImage",
+          "attributes": [
+            {
+              "name": "height",
+              "type": {
+                "text": "string"
+              },
+              "description": "Sets the rendered image container height using any valid CSS height value."
+            },
+            {
+              "name": "fit",
+              "type": {
+                "text": "\"contain\" | \"cover\" | \"fill\" | \"none\" | \"scale-down\""
+              },
+              "default": "contain",
+              "description": "Controls how the image fits its container."
+            },
+            {
+              "name": "crop",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Enables cropped image presentation."
+            },
+            {
+              "name": "position",
+              "type": {
+                "text": "string"
+              },
+              "default": "center center",
+              "description": "Sets the object position when a focal position is not supplied."
+            },
+            {
+              "name": "zoom",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Scales the image around its focal position."
+            },
+            {
+              "name": "focal-x",
+              "type": {
+                "text": "string"
+              },
+              "description": "Sets the horizontal focal point used for cropped images."
+            },
+            {
+              "name": "focal-y",
+              "type": {
+                "text": "string"
+              },
+              "description": "Sets the vertical focal point used for cropped images."
+            },
+            {
+              "name": "radius",
+              "type": {
+                "text": "string"
+              },
+              "default": "var(--radius-300)",
+              "description": "Sets the frame border radius."
+            },
+            {
+              "name": "aspect-ratio",
+              "type": {
+                "text": "string"
+              },
+              "description": "Sets the media aspect ratio using any valid CSS aspect-ratio value."
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "mui-image",
+          "customElement": true,
+          "slots": [
+            {
+              "name": "image",
+              "description": "Image media, normally an `img` element."
+            },
+            {
+              "name": "caption",
+              "description": "Optional caption content, normally a `figcaption` element."
+            }
+          ],
+          "events": [],
+          "cssProperties": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "mui-image",
+          "declaration": {
+            "name": "MuiImage",
+            "module": "src/components/mui-image/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/mui-icons/accessibility.ts",
       "declarations": [
         {
@@ -7501,138 +7633,6 @@
           "declaration": {
             "name": "MuiIconWarning",
             "module": "src/components/mui-icons/warning.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/mui-image/doc.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "muiDocs",
-          "type": {
-            "text": "MuiDocs"
-          },
-          "default": "{ Image: { namedSlots: { description: \"Use these names on items slotted inside this component.\", list: [\"image\",\"caption\"], }, title: \"Image\", description: \"Displays an image alongside an optional caption to provide context, explanation, or attribution. Useful for supporting content visually while maintaining clarity through descriptive labelling.\", hero: [ \"https://images.ctfassets.net/i5uwscj4pkk2/14eozXMPlzipgAfqaIR2Py/4e211990a30b4a08549deccfd30c71a9/Image_-_Home_Image.png\", ], figma: [ \"https://www.figma.com/design/l0mt1lXu97XoHJCEdnrWLp/Mui-Design-System?node-id=948-4194&t=0ytskb8cxriEmdz2-1\", ], storybook: [\"https://stories.muibook.com/?path=/docs/media-image--docs\"], github: [\"https://github.com/michaeltrilford/muibook/blob/main/src/components/mui-image/index.ts\"], website: [\"https://muibook.com/image\"], guides: [\"https://guides.muibook.com/image\"], usage: { list: [ \"Use to display images that require additional context or explanation.\", \"Use height + crop + fit=cover when you need fixed-height visual crops.\", \"Use max-height with aspect-ratio for responsive image frames that should not exceed a visual cap.\", \"Use focal-x/focal-y or position to keep important content in frame.\", \"Use zoom carefully to tighten framing without switching to background-image.\", \"Captions should clarify the relevance of the image, not repeat surrounding content.\", \"Ideal for diagrams, UI examples, or content requiring attribution.\", \"Ensure images are accessible with alt text and meaningful captions.\", ], }, accessibility: { designerList: [ \"Use meaningful alt text that describes the image’s purpose.\", \"Use alt=&#8220;&#8221; for decorative images that don’t convey information.\", \"Use the caption slot for extended context, especially for diagrams or UI patterns.\", ], engineerList: [ \"Use meaningful alt text that describes the image’s purpose.\", \"Use alt=&#8220;&#8221; for decorative images that don’t convey information.\", \"Use the caption slot for extended context, especially for diagrams or UI patterns.\", ], }, anatomy: { image: \"https://images.ctfassets.net/i5uwscj4pkk2/3BSbMl1cqUOB6oDmFLQjRx/193889c0f6d3da6178d51e5fff06b8ed/Image_-_Anatomy.png\", list: [\"Standard styling for a hero image.\", \"Optional caption for the image.\"], }, variants: { items: [ { key: \"\", title: \"\", description: \"\", image: \"\", }, ], }, stories: { items: [ { \"key\": \"single-image\", \"title\": \"Single image\", \"description\": \"Renders a responsive image with accessible alternative text.\", \"list\": [ \"Use meaningful alt text unless the image is purely decorative.\" ] }, { \"key\": \"image-with-caption\", \"title\": \"Image with caption\", \"description\": \"Associates supporting caption text with the image.\", \"list\": [ \"Use captions for context that is useful beyond the alternative text.\" ] }, { \"key\": \"cropped-height\", \"title\": \"Cropped Height\", \"description\": \"Crops an image to a constrained height.\", \"list\": [ \"Use object positioning to keep the important subject visible.\" ] }, { \"key\": \"cropped-centered\", \"title\": \"Cropped Centered\", \"description\": \"Centers the subject within a cropped image frame.\", \"list\": [ \"Use when the source composition supports central cropping.\" ] }, { \"key\": \"zoom-aspect-ratio\", \"title\": \"Zoom + Aspect Ratio\", \"description\": \"Combines a stable aspect ratio with image zoom.\", \"list\": [ \"Use a fixed ratio to prevent layout shift and zoom only when inspection is useful.\" ] } ], }, compositions: { description: \"Showcases actual use cases, demonstrating how the component fits into real-world UI scenarios.\", items: [ { key: \"muibook-resource\", name: \"Muibook Resource\", description: \"The Muibook documentation site uses MUI components to compose its layout, including headings, text, lists, buttons, icons, and image components.\", image: \"https://images.ctfassets.net/i5uwscj4pkk2/3LVvuYDZWRnMhxNy6GMLNd/c5074a05eacb2c22c50ea172b3567c48/Muibook-List-Composition.png\", }, ], }, related: { items: [ { name: \"\", link: \"\", }, ], }, rules: [ { heading: \"\", description: \"\", doContent: [{ description: \"\", image: \"\" }], dontContent: [{ description: \"\", image: \"\" }], }, ], behaviour: { list: [\"\"], }, writing: { list: [\"\"], }, }, }"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "muiDocs",
-          "declaration": {
-            "name": "muiDocs",
-            "module": "src/components/mui-image/doc.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/mui-image/index.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Frames a slotted image with optional cropping, focal positioning and caption content.",
-          "name": "MuiImage",
-          "attributes": [
-            {
-              "name": "height",
-              "type": {
-                "text": "string"
-              },
-              "description": "Sets the rendered image container height using any valid CSS height value."
-            },
-            {
-              "name": "fit",
-              "type": {
-                "text": "\"contain\" | \"cover\" | \"fill\" | \"none\" | \"scale-down\""
-              },
-              "default": "contain",
-              "description": "Controls how the image fits its container."
-            },
-            {
-              "name": "crop",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Enables cropped image presentation."
-            },
-            {
-              "name": "position",
-              "type": {
-                "text": "string"
-              },
-              "default": "center center",
-              "description": "Sets the object position when a focal position is not supplied."
-            },
-            {
-              "name": "zoom",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Scales the image around its focal position."
-            },
-            {
-              "name": "focal-x",
-              "type": {
-                "text": "string"
-              },
-              "description": "Sets the horizontal focal point used for cropped images."
-            },
-            {
-              "name": "focal-y",
-              "type": {
-                "text": "string"
-              },
-              "description": "Sets the vertical focal point used for cropped images."
-            },
-            {
-              "name": "radius",
-              "type": {
-                "text": "string"
-              },
-              "default": "var(--radius-300)",
-              "description": "Sets the frame border radius."
-            },
-            {
-              "name": "aspect-ratio",
-              "type": {
-                "text": "string"
-              },
-              "description": "Sets the media aspect ratio using any valid CSS aspect-ratio value."
-            }
-          ],
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "tagName": "mui-image",
-          "customElement": true,
-          "slots": [
-            {
-              "name": "image",
-              "description": "Image media, normally an `img` element."
-            },
-            {
-              "name": "caption",
-              "description": "Optional caption content, normally a `figcaption` element."
-            }
-          ],
-          "events": [],
-          "cssProperties": []
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "mui-image",
-          "declaration": {
-            "name": "MuiImage",
-            "module": "src/components/mui-image/index.ts"
           }
         }
       ]
@@ -13154,128 +13154,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/mui-work-log/doc.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "muiDocs",
-          "type": {
-            "text": "MuiDocs"
-          },
-          "default": "{ WorkLog: { namedSlots: { description: \"Use these names on items slotted inside this component.\", list: [\"icon\",\"before\",\"after\"], }, title: \"Work Log\", description: \"Work log provides a compact expandable work summary for agent responses.\", hero: [\"\"], figma: [\"\"], storybook: [\"\"], github: [\"https://github.com/michaeltrilford/muibook/blob/main/src/components/mui-work-log/index.ts\"], website: [\"https://muibook.com/work-log\"], guides: [\"https://guides.muibook.com/prompt\"], usage: { list: [ \"Use inside the header slot of Chat Message when an agent response needs a collapsible work summary.\", \"Set label to the short summary, such as elapsed work time.\", \"Use the default slot for compact work detail rows.\", \"Top-level Worker in a Chat Message header draws its divider on the summary row.\", \"Use rule when a trailing separator is needed outside the header slot.\", \"Use status with pending for active Thinking states that should shimmer without accordion interaction.\", \"Use status with variant='error' for a non-interactive failure state using the attention text treatment.\", \"Use pending without status for expandable active work states such as Working for 5s, without applying the Thinking shimmer.\", \"Nest Worker inside another Worker for compact child work rows such as Read files or Ran checks.\", \"Nested work rows are treated as secondary detail inside the parent work disclosure.\", ], }, accessibility: { designerList: [\"\"], engineerList: [ \"Worker uses Accordion Core internally, so the summary remains keyboard reachable and exposes expanded state.\", \"Keep work detail content short and non-essential; the main response should remain understandable while collapsed.\", ], }, anatomy: { image: \"\", list: [\"Status row\", \"Summary row\", \"Optional icon slot\", \"Toggle icon\", \"Detail slot\", \"Nested work rows\", \"Optional rule\"] }, variants: { items: [{ key: \"\", title: \"\", description: \"\", image: \"\" }] }, stories: { items: [ { key: \"single\", title: \"Single Work Log\", list: [\"Use in the prompt message header slot when an agent response needs a compact work summary.\", \"Keep detail rows short and supporting, not the main response.\"] }, { key: \"composable\", title: \"Composable Summary\", list: [\"Use the before and after slots to insert custom elements into the Work Log summary row.\", \"Good for showing line diffs, file counts, or badges next to the label.\"] }, { key: \"thinking\", title: \"Thinking\", list: [\"Use status and pending together to represent an active Thinking state.\", \"This creates a non-interactive row with a shimmer animation and no toggle icon.\"] }, { key: \"status\", title: \"Status\", list: [\"Use status and pending together for an active loading state.\", \"Use variant='error' with status for a non-interactive failure state using the attention treatment.\", \"Status rows have no disclosure toggle or accordion interaction.\"] }, { key: \"nested\", title: \"Nested Work Log\", list: [\"Use pending for active work states.\", \"Place Work Log inside another Work Log for secondary rows such as reading files, running checks, or applying changes.\", \"Nested rows are compact supporting detail.\"] }, ] }, compositions: { description: \"\", items: [] }, related: { items: [ { name: \"Chat Message\", link: \"https://guides.muibook.com/chat-message\" }, { name: \"Accordion Core\", link: \"https://guides.muibook.com/accordion-core\" }, ], }, rules: [ { heading: \"Keep Work Detail Secondary\", description: \"Use Worker for supporting execution detail, not as the main answer.\", doContent: [{ description: \"Show short checked/applied/validated lines.\", image: \"\" }], dontContent: [{ description: \"Do not hide the useful answer only inside Worker.\", image: \"\" }], }, ], behaviour: { list: [ \"Worker wraps Accordion Core and forwards the open attribute to its internal disclosure.\", \"When status is set, Worker renders a non-interactive row without Accordion Core or a toggle icon.\", \"Nested Worker rows are automatically marked with nested treatment when placed inside another Worker.\", \"Pending only applies the shimmer treatment when combined with status for Thinking-style rows.\", \"The error variant maps the Work Log label to Body's attention treatment.\", ], }, writing: { list: [ \"Keep the label short and factual.\", ], }, }, }"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "muiDocs",
-          "declaration": {
-            "name": "muiDocs",
-            "module": "src/components/mui-work-log/doc.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/mui-work-log/index.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Displays a compact expandable work summary for agent responses, such as elapsed work time, steps reviewed, checks run, or supporting execution detail.",
-          "name": "MuiWorkLog",
-          "attributes": [
-            {
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "Worked",
-              "description": "Summary text shown in the collapsed row, for example `Worked for 4m 10s`."
-            },
-            {
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Opens the work detail disclosure by default."
-            },
-            {
-              "name": "rule",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Adds a trailing rule when Worker is used outside the Chat Message header slot. Top-level header rows draw their divider on the summary row."
-            },
-            {
-              "name": "nested",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Applies compact nested work-row treatment. This is also applied automatically when Worker is placed inside another Worker."
-            },
-            {
-              "name": "pending",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Marks the row as in progress. When combined with `status`, the label uses the Thinking shimmer treatment."
-            },
-            {
-              "name": "status",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Renders a non-interactive status row without accordion behavior or toggle icon, useful for Thinking states."
-            },
-            {
-              "name": "variant",
-              "type": {
-                "text": "\"error\""
-              },
-              "description": "Applies the attention text treatment to an error status."
-            }
-          ],
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "tagName": "mui-work-log",
-          "customElement": true,
-          "slots": [
-            {
-              "name": "icon",
-              "description": "Optional leading status or task icon. Typically used for an activity indicator."
-            },
-            {
-              "name": "before",
-              "description": "Optional composable area before the main text label."
-            },
-            {
-              "name": "after",
-              "description": "Optional composable area after the main text label. Can be used for extra actions, badges, etc."
-            },
-            {
-              "name": "default",
-              "description": "Worker execution detail rows. Renders as accordion content."
-            }
-          ],
-          "events": [],
-          "cssProperties": []
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "mui-work-log",
-          "declaration": {
-            "name": "MuiWorkLog",
-            "module": "src/components/mui-work-log/index.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/mui-video-thumbnail/doc.ts",
       "declarations": [
         {
@@ -13543,6 +13421,128 @@
           "declaration": {
             "name": "MuiVideoThumbnail",
             "module": "src/components/mui-video-thumbnail/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mui-work-log/doc.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "muiDocs",
+          "type": {
+            "text": "MuiDocs"
+          },
+          "default": "{ WorkLog: { namedSlots: { description: \"Use these names on items slotted inside this component.\", list: [\"icon\",\"before\",\"after\"], }, title: \"Work Log\", description: \"Work log provides a compact expandable work summary for agent responses.\", hero: [\"\"], figma: [\"\"], storybook: [\"\"], github: [\"https://github.com/michaeltrilford/muibook/blob/main/src/components/mui-work-log/index.ts\"], website: [\"https://muibook.com/work-log\"], guides: [\"https://guides.muibook.com/prompt\"], usage: { list: [ \"Use inside the header slot of Chat Message when an agent response needs a collapsible work summary.\", \"Set label to the short summary, such as elapsed work time.\", \"Use the default slot for compact work detail rows.\", \"Top-level Worker in a Chat Message header draws its divider on the summary row.\", \"Use rule when a trailing separator is needed outside the header slot.\", \"Use status with pending for active Thinking states that should shimmer without accordion interaction.\", \"Use status with variant='error' for a non-interactive failure state using the attention text treatment.\", \"Use pending without status for expandable active work states such as Working for 5s, without applying the Thinking shimmer.\", \"Nest Worker inside another Worker for compact child work rows such as Read files or Ran checks.\", \"Nested work rows are treated as secondary detail inside the parent work disclosure.\", ], }, accessibility: { designerList: [\"\"], engineerList: [ \"Worker uses Accordion Core internally, so the summary remains keyboard reachable and exposes expanded state.\", \"Keep work detail content short and non-essential; the main response should remain understandable while collapsed.\", ], }, anatomy: { image: \"\", list: [\"Status row\", \"Summary row\", \"Optional icon slot\", \"Toggle icon\", \"Detail slot\", \"Nested work rows\", \"Optional rule\"] }, variants: { items: [{ key: \"\", title: \"\", description: \"\", image: \"\" }] }, stories: { items: [ { key: \"single\", title: \"Single Work Log\", list: [\"Use in the prompt message header slot when an agent response needs a compact work summary.\", \"Keep detail rows short and supporting, not the main response.\"] }, { key: \"composable\", title: \"Composable Summary\", list: [\"Use the before and after slots to insert custom elements into the Work Log summary row.\", \"Good for showing line diffs, file counts, or badges next to the label.\"] }, { key: \"thinking\", title: \"Thinking\", list: [\"Use status and pending together to represent an active Thinking state.\", \"This creates a non-interactive row with a shimmer animation and no toggle icon.\"] }, { key: \"status\", title: \"Status\", list: [\"Use status and pending together for an active loading state.\", \"Use variant='error' with status for a non-interactive failure state using the attention treatment.\", \"Status rows have no disclosure toggle or accordion interaction.\"] }, { key: \"nested\", title: \"Nested Work Log\", list: [\"Use pending for active work states.\", \"Place Work Log inside another Work Log for secondary rows such as reading files, running checks, or applying changes.\", \"Nested rows are compact supporting detail.\"] }, ] }, compositions: { description: \"\", items: [] }, related: { items: [ { name: \"Chat Message\", link: \"https://guides.muibook.com/chat-message\" }, { name: \"Accordion Core\", link: \"https://guides.muibook.com/accordion-core\" }, ], }, rules: [ { heading: \"Keep Work Detail Secondary\", description: \"Use Worker for supporting execution detail, not as the main answer.\", doContent: [{ description: \"Show short checked/applied/validated lines.\", image: \"\" }], dontContent: [{ description: \"Do not hide the useful answer only inside Worker.\", image: \"\" }], }, ], behaviour: { list: [ \"Worker wraps Accordion Core and forwards the open attribute to its internal disclosure.\", \"When status is set, Worker renders a non-interactive row without Accordion Core or a toggle icon.\", \"Nested Worker rows are automatically marked with nested treatment when placed inside another Worker.\", \"Pending only applies the shimmer treatment when combined with status for Thinking-style rows.\", \"The error variant maps the Work Log label to Body's attention treatment.\", ], }, writing: { list: [ \"Keep the label short and factual.\", ], }, }, }"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "muiDocs",
+          "declaration": {
+            "name": "muiDocs",
+            "module": "src/components/mui-work-log/doc.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mui-work-log/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Displays a compact expandable work summary for agent responses, such as elapsed work time, steps reviewed, checks run, or supporting execution detail.",
+          "name": "MuiWorkLog",
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "Worked",
+              "description": "Summary text shown in the collapsed row, for example `Worked for 4m 10s`."
+            },
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Opens the work detail disclosure by default."
+            },
+            {
+              "name": "rule",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Adds a trailing rule when Worker is used outside the Chat Message header slot. Top-level header rows draw their divider on the summary row."
+            },
+            {
+              "name": "nested",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Applies compact nested work-row treatment. This is also applied automatically when Worker is placed inside another Worker."
+            },
+            {
+              "name": "pending",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Marks the row as in progress. When combined with `status`, the label uses the Thinking shimmer treatment."
+            },
+            {
+              "name": "status",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Renders a non-interactive status row without accordion behavior or toggle icon, useful for Thinking states."
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "\"error\""
+              },
+              "description": "Applies the attention text treatment to an error status."
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "mui-work-log",
+          "customElement": true,
+          "slots": [
+            {
+              "name": "icon",
+              "description": "Optional leading status or task icon. Typically used for an activity indicator."
+            },
+            {
+              "name": "before",
+              "description": "Optional composable area before the main text label."
+            },
+            {
+              "name": "after",
+              "description": "Optional composable area after the main text label. Can be used for extra actions, badges, etc."
+            },
+            {
+              "name": "default",
+              "description": "Worker execution detail rows. Renders as accordion content."
+            }
+          ],
+          "events": [],
+          "cssProperties": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "mui-work-log",
+          "declaration": {
+            "name": "MuiWorkLog",
+            "module": "src/components/mui-work-log/index.ts"
           }
         }
       ]
@@ -14227,7 +14227,7 @@
               "type": {
                 "text": "\"header\" | \"row\" | \"action\""
               },
-              "description": "Sets the slat layout and interactive presentation."
+              "description": "Sets the slat layout and interactive presentation. Explicitly set variant='row' for standard row slats unless creating a header (variant='header'), interactive action slat (variant='action'), or custom layout; Slat items inside SlatGroup or CardBody require an explicit variant for automatic layout and card alignment."
             },
             {
               "name": "col",
@@ -14296,6 +14296,302 @@
           "declaration": {
             "name": "MuiSlat",
             "module": "src/components/mui-slat/slat/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mui-stepper/step/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Defines an individual step inside `mui-stepper` with a title, state, and optional secondary content.",
+          "name": "MuiStep",
+          "attributes": [
+            {
+              "name": "state",
+              "type": {
+                "text": "\"upcoming\" | \"active\" | \"completed\" | \"success\" | \"pending\" | \"error\" | \"disabled\""
+              },
+              "default": "upcoming",
+              "description": "Overrides the visual state for the individual step."
+            },
+            {
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "description": "Sets the step label text."
+            },
+            {
+              "name": "hide-icon",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Hides the step state icon and dot marker."
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "mui-step",
+          "customElement": true,
+          "slots": [
+            {
+              "name": "secondary",
+              "description": "Secondary supporting content rendered with the step title."
+            }
+          ],
+          "events": [],
+          "cssProperties": [
+            {
+              "name": "--stepper-color",
+              "description": "Controls the default step text and connector color."
+            },
+            {
+              "name": "--stepper-success-color",
+              "description": "Controls the success state color."
+            },
+            {
+              "name": "--stepper-error-color",
+              "description": "Controls the error state color."
+            },
+            {
+              "name": "--stepper-title-only",
+              "description": "Controls the vertical title offset when a step has no secondary slot content."
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "mui-step",
+          "declaration": {
+            "name": "MuiStep",
+            "module": "src/components/mui-stepper/step/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mui-stack/vstack/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Arranges slotted content vertically with token-based spacing and alignment controls.",
+          "name": "MuiVStack",
+          "attributes": [
+            {
+              "name": "space",
+              "type": {
+                "text": "string"
+              },
+              "default": "var(--space-500)",
+              "description": "Gap between children. Accepts any valid CSS gap value or design token."
+            },
+            {
+              "name": "alignx",
+              "type": {
+                "text": "string"
+              },
+              "default": "normal",
+              "description": "Horizontal alignment of children, mapped to grid `justify-items`."
+            },
+            {
+              "name": "aligny",
+              "type": {
+                "text": "string"
+              },
+              "default": "normal",
+              "description": "Vertical alignment of children, mapped to grid `align-items`."
+            },
+            {
+              "name": "padding",
+              "type": {
+                "text": "string"
+              },
+              "default": "var(--space-000)",
+              "description": "Padding applied inside the stack. Accepts any valid CSS padding value or design token."
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "string"
+              },
+              "description": "Sets the host height. Accepts any valid CSS height value, including tokens."
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "string"
+              },
+              "description": "Sets the host width. Accepts any valid CSS width value, including tokens."
+            },
+            {
+              "name": "viewport",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Sets stack height to `100dvh`. Intended for a top-level stack that owns the viewport-height region."
+            },
+            {
+              "name": "fill",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Sets width and height to `100%` when the parent supplies a clearly bounded layout region."
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "mui-v-stack",
+          "customElement": true,
+          "slots": [
+            {
+              "name": "",
+              "description": "Content arranged vertically inside the stack."
+            }
+          ],
+          "events": [],
+          "cssProperties": [
+            {
+              "name": "--stack-height",
+              "description": "Resolved stack host height. Prefer the `height`, `viewport`, or `fill` attributes for common layouts."
+            },
+            {
+              "name": "--stack-width",
+              "description": "Resolved stack host width. Prefer the `width` or `fill` attributes for common layouts."
+            }
+          ],
+          "cssParts": [
+            {
+              "name": "color"
+            },
+            {
+              "name": "font-family"
+            },
+            {
+              "name": "font-size"
+            },
+            {
+              "name": "font-weight"
+            },
+            {
+              "name": "letter-spacing"
+            },
+            {
+              "name": "line-height"
+            },
+            {
+              "name": "text-transform"
+            },
+            {
+              "name": "text-decoration"
+            },
+            {
+              "name": "text-align"
+            },
+            {
+              "name": "padding"
+            },
+            {
+              "name": "margin"
+            },
+            {
+              "name": "gap"
+            },
+            {
+              "name": "width"
+            },
+            {
+              "name": "height"
+            },
+            {
+              "name": "box-sizing"
+            },
+            {
+              "name": "display"
+            },
+            {
+              "name": "flex"
+            },
+            {
+              "name": "flex-direction"
+            },
+            {
+              "name": "flex-wrap"
+            },
+            {
+              "name": "justify-content"
+            },
+            {
+              "name": "align-items"
+            },
+            {
+              "name": "align-content"
+            },
+            {
+              "name": "align-self"
+            },
+            {
+              "name": "grid-template-columns"
+            },
+            {
+              "name": "grid-template-rows"
+            },
+            {
+              "name": "grid-column"
+            },
+            {
+              "name": "grid-row"
+            },
+            {
+              "name": "place-items"
+            },
+            {
+              "name": "place-content"
+            },
+            {
+              "name": "vertical-align"
+            },
+            {
+              "name": "background"
+            },
+            {
+              "name": "border"
+            },
+            {
+              "name": "border-radius"
+            },
+            {
+              "name": "box-shadow"
+            },
+            {
+              "name": "opacity"
+            },
+            {
+              "name": "transition"
+            },
+            {
+              "name": "outline"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "mui-v-stack",
+          "declaration": {
+            "name": "MuiVStack",
+            "module": "src/components/mui-stack/vstack/index.ts"
           }
         }
       ]
@@ -14530,302 +14826,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/mui-stack/vstack/index.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Arranges slotted content vertically with token-based spacing and alignment controls.",
-          "name": "MuiVStack",
-          "attributes": [
-            {
-              "name": "space",
-              "type": {
-                "text": "string"
-              },
-              "default": "var(--space-500)",
-              "description": "Gap between children. Accepts any valid CSS gap value or design token."
-            },
-            {
-              "name": "alignx",
-              "type": {
-                "text": "string"
-              },
-              "default": "normal",
-              "description": "Horizontal alignment of children, mapped to grid `justify-items`."
-            },
-            {
-              "name": "aligny",
-              "type": {
-                "text": "string"
-              },
-              "default": "normal",
-              "description": "Vertical alignment of children, mapped to grid `align-items`."
-            },
-            {
-              "name": "padding",
-              "type": {
-                "text": "string"
-              },
-              "default": "var(--space-000)",
-              "description": "Padding applied inside the stack. Accepts any valid CSS padding value or design token."
-            },
-            {
-              "name": "height",
-              "type": {
-                "text": "string"
-              },
-              "description": "Sets the host height. Accepts any valid CSS height value, including tokens."
-            },
-            {
-              "name": "width",
-              "type": {
-                "text": "string"
-              },
-              "description": "Sets the host width. Accepts any valid CSS width value, including tokens."
-            },
-            {
-              "name": "viewport",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Sets stack height to `100dvh`. Intended for a top-level stack that owns the viewport-height region."
-            },
-            {
-              "name": "fill",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Sets width and height to `100%` when the parent supplies a clearly bounded layout region."
-            }
-          ],
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "tagName": "mui-v-stack",
-          "customElement": true,
-          "slots": [
-            {
-              "name": "",
-              "description": "Content arranged vertically inside the stack."
-            }
-          ],
-          "events": [],
-          "cssProperties": [
-            {
-              "name": "--stack-height",
-              "description": "Resolved stack host height. Prefer the `height`, `viewport`, or `fill` attributes for common layouts."
-            },
-            {
-              "name": "--stack-width",
-              "description": "Resolved stack host width. Prefer the `width` or `fill` attributes for common layouts."
-            }
-          ],
-          "cssParts": [
-            {
-              "name": "color"
-            },
-            {
-              "name": "font-family"
-            },
-            {
-              "name": "font-size"
-            },
-            {
-              "name": "font-weight"
-            },
-            {
-              "name": "letter-spacing"
-            },
-            {
-              "name": "line-height"
-            },
-            {
-              "name": "text-transform"
-            },
-            {
-              "name": "text-decoration"
-            },
-            {
-              "name": "text-align"
-            },
-            {
-              "name": "padding"
-            },
-            {
-              "name": "margin"
-            },
-            {
-              "name": "gap"
-            },
-            {
-              "name": "width"
-            },
-            {
-              "name": "height"
-            },
-            {
-              "name": "box-sizing"
-            },
-            {
-              "name": "display"
-            },
-            {
-              "name": "flex"
-            },
-            {
-              "name": "flex-direction"
-            },
-            {
-              "name": "flex-wrap"
-            },
-            {
-              "name": "justify-content"
-            },
-            {
-              "name": "align-items"
-            },
-            {
-              "name": "align-content"
-            },
-            {
-              "name": "align-self"
-            },
-            {
-              "name": "grid-template-columns"
-            },
-            {
-              "name": "grid-template-rows"
-            },
-            {
-              "name": "grid-column"
-            },
-            {
-              "name": "grid-row"
-            },
-            {
-              "name": "place-items"
-            },
-            {
-              "name": "place-content"
-            },
-            {
-              "name": "vertical-align"
-            },
-            {
-              "name": "background"
-            },
-            {
-              "name": "border"
-            },
-            {
-              "name": "border-radius"
-            },
-            {
-              "name": "box-shadow"
-            },
-            {
-              "name": "opacity"
-            },
-            {
-              "name": "transition"
-            },
-            {
-              "name": "outline"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "mui-v-stack",
-          "declaration": {
-            "name": "MuiVStack",
-            "module": "src/components/mui-stack/vstack/index.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/mui-stepper/step/index.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Defines an individual step inside `mui-stepper` with a title, state, and optional secondary content.",
-          "name": "MuiStep",
-          "attributes": [
-            {
-              "name": "state",
-              "type": {
-                "text": "\"upcoming\" | \"active\" | \"completed\" | \"success\" | \"pending\" | \"error\" | \"disabled\""
-              },
-              "default": "upcoming",
-              "description": "Overrides the visual state for the individual step."
-            },
-            {
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "description": "Sets the step label text."
-            },
-            {
-              "name": "hide-icon",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Hides the step state icon and dot marker."
-            }
-          ],
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "tagName": "mui-step",
-          "customElement": true,
-          "slots": [
-            {
-              "name": "secondary",
-              "description": "Secondary supporting content rendered with the step title."
-            }
-          ],
-          "events": [],
-          "cssProperties": [
-            {
-              "name": "--stepper-color",
-              "description": "Controls the default step text and connector color."
-            },
-            {
-              "name": "--stepper-success-color",
-              "description": "Controls the success state color."
-            },
-            {
-              "name": "--stepper-error-color",
-              "description": "Controls the error state color."
-            },
-            {
-              "name": "--stepper-title-only",
-              "description": "Controls the vertical title offset when a step has no secondary slot content."
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "mui-step",
-          "declaration": {
-            "name": "MuiStep",
-            "module": "src/components/mui-stepper/step/index.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/mui-stepper/stepper/index.ts",
       "declarations": [
         {
@@ -14970,50 +14970,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/mui-table/row-group/index.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Groups related table rows and optionally presents them as a heading region.",
-          "name": "MuiRowGroup",
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "tagName": "mui-row-group",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "heading",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Applies header row styling to the contained rows."
-            }
-          ],
-          "slots": [
-            {
-              "name": "",
-              "description": "Related `mui-row` children."
-            }
-          ],
-          "events": [],
-          "cssProperties": []
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "mui-row-group",
-          "declaration": {
-            "name": "MuiRowGroup",
-            "module": "src/components/mui-table/row-group/index.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/mui-table/row/index.ts",
       "declarations": [
         {
@@ -15075,89 +15031,6 @@
           "declaration": {
             "name": "MuiRow",
             "module": "src/components/mui-table/row/index.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/mui-table/table/index.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Groups row collections into an accessible table layout.",
-          "name": "MuiTable",
-          "attributes": [
-            {
-              "name": "highlight",
-              "type": {
-                "text": "\"hover\" | \"select\""
-              },
-              "description": "Opts into row-driven highlight behavior. `hover` follows the pointer, `select` updates the highlight when a body row is clicked. Use one mode at a time."
-            },
-            {
-              "name": "highlight-row",
-              "type": {
-                "text": "string"
-              },
-              "description": "Opt-in animated row highlight target matching a child row's `row-id`."
-            },
-            {
-              "name": "highlight-row-index",
-              "type": {
-                "text": "number"
-              },
-              "description": "Opt-in animated row highlight target by zero-based body row index for static tables."
-            }
-          ],
-          "superclass": {
-            "name": "HTMLElement"
-          },
-          "tagName": "mui-table",
-          "customElement": true,
-          "slots": [
-            {
-              "name": "",
-              "description": "Related `mui-row-group` children."
-            }
-          ],
-          "events": [
-            {
-              "name": "row-highlight-change",
-              "description": "Dispatched when `highlight=\"select\"` changes the highlighted row with `detail.row`, `detail.rowId`, `detail.rowIndex`, and `detail.source`."
-            }
-          ],
-          "cssProperties": [
-            {
-              "name": "--table-row-highlight-background",
-              "description": "Background for the animated row highlight layer."
-            },
-            {
-              "name": "--table-row-highlight-radius",
-              "description": "Border radius for the animated row highlight layer."
-            },
-            {
-              "name": "--table-row-highlight-shadow",
-              "description": "Optional shadow for the animated row highlight layer."
-            },
-            {
-              "name": "--table-row-highlight-speed",
-              "description": "Transition speed for row highlight movement and resizing."
-            },
-            {
-              "name": "--table-row-highlight-easing",
-              "description": "Transition easing for row highlight movement and resizing."
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "mui-table",
-          "declaration": {
-            "name": "MuiTable",
-            "module": "src/components/mui-table/table/index.ts"
           }
         }
       ]
@@ -15268,6 +15141,133 @@
           "declaration": {
             "name": "MuiTabItem",
             "module": "src/components/mui-tabs/item/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mui-table/table/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Groups row collections into an accessible table layout.",
+          "name": "MuiTable",
+          "attributes": [
+            {
+              "name": "highlight",
+              "type": {
+                "text": "\"hover\" | \"select\""
+              },
+              "description": "Opts into row-driven highlight behavior. `hover` follows the pointer, `select` updates the highlight when a body row is clicked. Use one mode at a time."
+            },
+            {
+              "name": "highlight-row",
+              "type": {
+                "text": "string"
+              },
+              "description": "Opt-in animated row highlight target matching a child row's `row-id`."
+            },
+            {
+              "name": "highlight-row-index",
+              "type": {
+                "text": "number"
+              },
+              "description": "Opt-in animated row highlight target by zero-based body row index for static tables."
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "mui-table",
+          "customElement": true,
+          "slots": [
+            {
+              "name": "",
+              "description": "Related `mui-row-group` children."
+            }
+          ],
+          "events": [
+            {
+              "name": "row-highlight-change",
+              "description": "Dispatched when `highlight=\"select\"` changes the highlighted row with `detail.row`, `detail.rowId`, `detail.rowIndex`, and `detail.source`."
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--table-row-highlight-background",
+              "description": "Background for the animated row highlight layer."
+            },
+            {
+              "name": "--table-row-highlight-radius",
+              "description": "Border radius for the animated row highlight layer."
+            },
+            {
+              "name": "--table-row-highlight-shadow",
+              "description": "Optional shadow for the animated row highlight layer."
+            },
+            {
+              "name": "--table-row-highlight-speed",
+              "description": "Transition speed for row highlight movement and resizing."
+            },
+            {
+              "name": "--table-row-highlight-easing",
+              "description": "Transition easing for row highlight movement and resizing."
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "mui-table",
+          "declaration": {
+            "name": "MuiTable",
+            "module": "src/components/mui-table/table/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/mui-table/row-group/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Groups related table rows and optionally presents them as a heading region.",
+          "name": "MuiRowGroup",
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "mui-row-group",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "heading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Applies header row styling to the contained rows."
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "Related `mui-row` children."
+            }
+          ],
+          "events": [],
+          "cssProperties": []
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "mui-row-group",
+          "declaration": {
+            "name": "MuiRowGroup",
+            "module": "src/components/mui-table/row-group/index.ts"
           }
         }
       ]
