@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-26T03:37:01.860Z",
+  "generatedAt": "2026-08-09T02:49:52.476Z",
   "components": {
     "mui-body": {
       "version": 1,
@@ -31,6 +31,10 @@
         {
           "name": "has-after",
           "description": "Set when after slot content exists, allowing the component to adjust trailing spacing, layout columns, and slot-aware styling."
+        },
+        {
+          "name": "has-badge",
+          "description": "Set when badge slot content exists, allowing the component to position and present a notification badge at the top-right corner of the button."
         },
         {
           "name": "has-video",
@@ -134,6 +138,30 @@
         }
       ]
     },
+    "mui-form-section-footer": {
+      "version": 1,
+      "destinationOnly": true,
+      "attributes": [
+        {
+          "name": "has-rule",
+          "description": "Set when a rule is present, allowing the footer layout to account for the divider."
+        }
+      ]
+    },
+    "mui-header-bar": {
+      "version": 1,
+      "destinationOnly": true,
+      "attributes": [
+        {
+          "name": "has-left",
+          "description": "Set when left slot content exists, allowing the component to render and size the left header column and its optional resize rail."
+        },
+        {
+          "name": "has-right",
+          "description": "Set when right slot content exists, allowing the component to render and size the right header column and its optional resize rail."
+        }
+      ]
+    },
     "mui-form-section": {
       "version": 1,
       "destinationOnly": true,
@@ -145,16 +173,6 @@
         {
           "name": "has-footer",
           "description": "Set when footer content exists, allowing the component to adjust internal spacing and structural regions."
-        }
-      ]
-    },
-    "mui-form-section-footer": {
-      "version": 1,
-      "destinationOnly": true,
-      "attributes": [
-        {
-          "name": "has-rule",
-          "description": "Set when a rule is present, allowing the footer layout to account for the divider."
         }
       ]
     },
@@ -364,16 +382,6 @@
         }
       ]
     },
-    "mui-row": {
-      "version": 1,
-      "destinationOnly": true,
-      "attributes": [
-        {
-          "name": "in-card",
-          "description": "Set when rendered inside a card context, allowing the component to inherit card-aware spacing and divider treatment."
-        }
-      ]
-    },
     "mui-table": {
       "version": 1,
       "destinationOnly": true,
@@ -381,6 +389,16 @@
         {
           "name": "card-slot",
           "description": "Applied to a table used in Card Body, allowing edge-to-edge table layout with content inset matched to the current Card size."
+        }
+      ]
+    },
+    "mui-row": {
+      "version": 1,
+      "destinationOnly": true,
+      "attributes": [
+        {
+          "name": "in-card",
+          "description": "Set when rendered inside a card context, allowing the component to inherit card-aware spacing and divider treatment."
         }
       ]
     },
