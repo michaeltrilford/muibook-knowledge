@@ -69,6 +69,7 @@ let compositionsData = { compositions: {}, agentCompositions: {} };
 let rulesText = '';
 let dynamicAttrs = {};
 let designDocs = '';
+let changelogDocs = '';
 let knowledgeMap = '';
 let mcpInstructions = '';
 let resourceIndex = {};
@@ -144,7 +145,15 @@ loadSection('DESIGN.md', () => {
   }
 });
 
-// 7. Load knowledge front-door docs and indexes
+// 7. Load CHANGELOG.md
+loadSection('CHANGELOG.md', () => {
+  const changelogPath = path.join(__dirname, 'CHANGELOG.md');
+  if (fs.existsSync(changelogPath)) {
+    changelogDocs = fs.readFileSync(changelogPath, 'utf8');
+  }
+});
+
+// 8. Load knowledge front-door docs and indexes
 loadSection('knowledge front door', () => {
   const knowledgeMapPath = path.join(__dirname, 'knowledge-map.md');
   if (fs.existsSync(knowledgeMapPath)) {
@@ -174,7 +183,7 @@ loadSection('knowledge front door', () => {
   }
 });
 
-// 8. Load authored skill guides
+// 9. Load authored skill guides
 loadSection('skill guides', () => {
   for (const guide of skillGuideDefinitions) {
     const guidePath = path.join(__dirname, guide.file);
@@ -400,6 +409,7 @@ function getKnowledgeSummary() {
     '- `get_rules`: read component-tree generation rules.',
     '- `get_dynamic_attrs`: read runtime/destination-only attrs.',
     '- `get_design_system`: read token, surface, theme, and layout guidance.',
+    '- `get_changelog`: read upcoming and released Muibook package changes.',
     '- `list_skill_guides`, `search_skill_guides`, `get_skill_guide`: discover and read authored skills.',
     '',
     '## Bundle Counts',
@@ -467,6 +477,14 @@ const resourceDefinitions = [
     description: 'Design language, tokens, surfaces, themes, spacing, typography, and layout guidance.',
     mimeType: 'text/markdown',
     read: () => designDocs || ''
+  },
+  {
+    uri: 'muibook://changelog',
+    name: 'CHANGELOG.md',
+    title: 'Changelog',
+    description: 'Package release history, upcoming change notes, and released version summaries.',
+    mimeType: 'text/markdown',
+    read: () => changelogDocs || ''
   },
   {
     uri: 'muibook://rules',
@@ -604,6 +622,14 @@ function handleMessage(message, respond, respondError) {
           {
             name: "get_design_system",
             description: "Get token structures, typography specifications, spacing definitions, and layout philosophy from DESIGN.md.",
+            inputSchema: {
+              type: "object",
+              properties: {}
+            }
+          },
+          {
+            name: "get_changelog",
+            description: "Get Muibook package release history, upcoming change notes, and released version summaries from CHANGELOG.md.",
             inputSchema: {
               type: "object",
               properties: {}
@@ -828,6 +854,13 @@ function handleToolCall(id, toolName, args, respond, respondError) {
           return respond(id, { content: [{ type: "text", text: "Design system documentation not found." }] });
         }
         return respond(id, { content: [{ type: "text", text: designDocs }] });
+      }
+
+      case "get_changelog": {
+        if (!changelogDocs) {
+          return respond(id, { content: [{ type: "text", text: "Changelog documentation not found." }] });
+        }
+        return respond(id, { content: [{ type: "text", text: changelogDocs }] });
       }
 
       case "list_skill_guides": {

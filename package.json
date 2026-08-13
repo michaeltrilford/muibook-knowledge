@@ -21,6 +21,7 @@
     "resource-index.json",
     "knowledge-map.md",
     "mcp-instructions.md",
+    "CHANGELOG.md",
     "AGENTS.md",
     "DESIGN.md",
     "mcp-server.js"
