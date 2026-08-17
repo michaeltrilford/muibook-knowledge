@@ -8,22 +8,37 @@ description: Lightweight, generated knowledge of current Muibook Web Components,
 <!-- Content is compiled from src/knowledge/fragments and package components. -->
 
 # Muibook Components
-
+ 
 Use this single-file snapshot of Muibook 26.0.1 when the full knowledge MCP is unavailable or unnecessary.
-
+ 
 This skill provides component knowledge. When paired with `redactd-canvas-muibook`, that skill
 owns the Redactd tree contract, validation, browser transport, and paste workflow.
-
+ 
+## Installation & Setup
+ 
+Install the component library package:
+ 
+```bash
+npm install @muibook/components
+```
+ 
+Register the components in your project entry point:
+ 
+```ts
+import "@muibook/components";
+```
+ 
 ## Workflow
-
+ 
 1. Search the component reference below for relevant tag names and purposes.
 2. Use only the listed public attribute and slot names. Use the MCP when exact types, defaults, events, parts, or component tokens are required.
 3. Prefer the listed semantic tokens for meaningful UI styling; use base tokens for foundations.
 4. Adapt the embedded compositions when a selected example matches the requested interface.
-5. For Redactd Canvas work, hand the selected components or composition tree to
+5. When working from a wireframe, sketch, or screenshot, activate and follow the `wireframe-to-muibook-components` skill for visual interpretation rules.
+6. For Redactd Canvas work, hand the selected components or composition tree to
    `redactd-canvas-muibook`. The compositions below already use its canonical
    `{ id, type, props, children }` shape, including slot placement in `props.slot`.
-6. If the Muibook MCP is available, use its `start_here` tool for richer or newer guidance. Treat a newer MCP version as authoritative.
+7. If the Muibook MCP is available, use its `start_here` tool for richer or newer guidance. Treat a newer MCP version as authoritative.
 
 ## Boundaries
 
@@ -354,9 +369,13 @@ every child merely because it appears in an example.
   the header; use a separate child with `props.slot: "legend"` when the legend needs its own row or
   independent layout. Whichever placement is chosen, label every supplied series and keep legend
   colors consistent with the series.
-- `FinancialBarChart` and `ComparisonChart` provide their own padded header region. Add local
-  padding to a Market Sparkline header only when its surrounding Card or layout does not already
-  provide the needed inset. Do not copy example padding or spacing without considering the parent.
+- `FinancialBarChart` and `ComparisonChart` provide their own native padded header region and divider strokes.
+  **Never use `CardHeader` or a table header (`RowGroup[heading]`) above or inside the chart**.
+  Placing a `CardHeader` above a chart causes duplicate headers, conflicting borders, and mismatched padding.
+- When embedding a chart in a Card, use `Card` with `size: "none"` and `usage: "grid"`, containing a direct child `CardBody` with `size: "none"` wrapping the chart. Let the chart own the full card boundary, internal header padding, and plot divider.
+- Compose the chart header directly in `props.slot: "header"` using an `HStack` (or `Stack`) with `alignX: "space-between"`, `alignY: "center"`, and `space: "var(--space-300)"` or `"var(--space-400)"`:
+  - **Start (Left)**: Section `Heading` (e.g. `size="4"`, `level="2"`) or a title + subtitle stack.
+  - **End (Right)**: Interactive controls or range selector — such as a timeframe `Dropdown` (`position: "right"`, `size: "small"`) containing a trigger `Button` (`slot: "action"`, `size="small"`, `variant="secondary"`, e.g. text `"This week"`, with trailing dropdown `_Icon` `mui-icon-down-chevron` `size="x-small"` in `slot="after"`) and a `Menu` with action options ("Today", "This week", "Last 30 days", "Year to date").
 - Use `header-stroke` on Financial Bar Chart or Comparison Chart only when the requested composition
   should visually join the populated header to the plot without the default divider.
 
@@ -565,6 +584,131 @@ Example Comparison Chart with a compact legend composed into the header:
   ]
 }
 ```
+
+Example Card-Embedded Comparison Chart with section heading and trailing timeframe action:
+
+```json
+{
+  "id": "revenue_card",
+  "type": "Card",
+  "props": {
+    "size": "none",
+    "usage": "grid"
+  },
+  "children": [
+    {
+      "id": "revenue_card_body",
+      "type": "CardBody",
+      "props": {
+        "size": "none"
+      },
+      "children": [
+        {
+          "id": "revenue_comparison_chart",
+          "type": "ComparisonChart",
+          "props": {
+            "mode": "absolute",
+            "label": "Revenue for May 12 to May 18, 2024",
+            "scale": "both",
+            "height": "35rem",
+            "currency": "USD",
+            "attribution": "none",
+            "interactive": true,
+            "value-format": "currency",
+            "series": [
+              {
+                "id": "revenue",
+                "label": "Revenue",
+                "data": [
+                  { "time": "2024-05-12", "value": 12500 },
+                  { "time": "2024-05-13", "value": 19000 },
+                  { "time": "2024-05-14", "value": 16000 },
+                  { "time": "2024-05-15", "value": 24000 },
+                  { "time": "2024-05-16", "value": 17500 },
+                  { "time": "2024-05-17", "value": 14500 },
+                  { "time": "2024-05-18", "value": 27000 }
+                ]
+              }
+            ]
+          },
+          "children": [
+            {
+              "id": "revenue_chart_header",
+              "type": "HStack",
+              "props": {
+                "slot": "header",
+                "space": "var(--space-300)",
+                "width": "auto",
+                "height": "auto",
+                "alignX": "space-between",
+                "alignY": "center"
+              },
+              "children": [
+                {
+                  "id": "revenue_chart_title",
+                  "type": "Heading",
+                  "props": {
+                    "size": "4",
+                    "text": "Overview",
+                    "level": "2"
+                  },
+                  "children": []
+                },
+                {
+                  "id": "revenue_timeframe_dropdown",
+                  "type": "Dropdown",
+                  "props": {
+                    "position": "right",
+                    "size": "small"
+                  },
+                  "children": [
+                    {
+                      "id": "revenue_timeframe_button",
+                      "type": "Button",
+                      "props": {
+                        "slot": "action",
+                        "size": "small",
+                        "text": "This week",
+                        "variant": "secondary"
+                      },
+                      "children": [
+                        {
+                          "id": "revenue_timeframe_chevron",
+                          "type": "_Icon",
+                          "props": {
+                            "icon": "mui-icon-down-chevron",
+                            "size": "x-small",
+                            "slot": "after"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "id": "revenue_timeframe_menu",
+                      "type": "Menu",
+                      "props": {
+                        "width": "12rem"
+                      },
+                      "children": [
+                        { "id": "timeframe_today", "type": "Button", "props": { "text": "Today", "variant": "tertiary", "align": "start" }, "children": [] },
+                        { "id": "timeframe_week", "type": "Button", "props": { "text": "This week", "variant": "tertiary", "align": "start" }, "children": [] },
+                        { "id": "timeframe_month", "type": "Button", "props": { "text": "Last 30 days", "variant": "tertiary", "align": "start" }, "children": [] },
+                        { "id": "timeframe_ytd", "type": "Button", "props": { "text": "Year to date", "variant": "tertiary", "align": "start" }, "children": [] }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
 
 
 ## Header Bar With Drawer Region
@@ -1079,7 +1223,7 @@ Use real Muibook asset paths:
 - `mui-action-toggle` — Switches a prompt action between its compact trigger and expanded active content. Attributes: mode. Slots: default.
 - `mui-addon` — Adds compact leading or trailing supporting content to an input control. Attributes: slot, size. Slots: default.
 - `mui-alert` — Surfaces task-related feedback with an intent icon, message content and optional action. Attributes: variant, label, hide-label, size. Slots: default, action.
-- `mui-avatar` — Displays an image, initials, or slotted icon for a represented person or entity. Attributes: label, image, size, background, background-color, status, status-label. Slots: default.
+- `mui-avatar` — Displays an image, initials, or slotted icon for a represented person or entity. Attributes: label, image, size, background, background-color, status, status-label, usage. Slots: default.
 - `mui-avatar-chip` — Composes an avatar, primary label, and secondary label into a compact profile identity pattern for media metadata, creator rows, and compact profile references. Attributes: primary, secondary, image, label, background, background-color, href, target, usage, size. Slots: primary, secondary.
 - `mui-avatar-group` — Stacks multiple avatars with controlled overlap and a separating ring. Attributes: size, overlap, label, fan. Slots: default.
 - `mui-badge` — Displays compact, non-interactive presentational labels, counts, or lightweight metadata. Use for labels such as Beta, Default, IMG, or Shared when they support the surrounding UI rather than acting as the primary state field for a record. Use Status for state values in tables and slats. Attributes: variant, size, color, usage. Slots: default.
@@ -1093,13 +1237,14 @@ Use real Muibook asset paths:
 - `mui-card-header` — Displays heading or summary content at the top of a card. Attributes: size. Slots: default.
 - `mui-carousel-controller` — Coordinates carousel controls and item panels, with optional automatic rotation. Attributes: auto-rotate, rotate-interval, borderless, radius, swipe. Slots: controls, item.
 - `mui-carousel-panel` — Displays content associated with a selected carousel control. Attributes: item. Slots: default.
-- `mui-cell` — Displays content inside a table row with optional checkbox or action-column alignment. Attributes: align-y, action, checkbox. Slots: default.
+- `mui-cell` — Displays content inside a table row with optional checkbox, horizontal alignment, or action-column styling. Attributes: aligny, alignx, action, checkbox. Slots: default.
 - `mui-chat-message` — Provides a conversation message row with optional avatar content and consistently scaled message content. Attributes: size, variant, align, width, footer-position, footer-visibility. Slots: avatar, header, default, footer.
 - `mui-checkbox` — Selects a boolean or indeterminate option with optional slotted label content. Attributes: checked, disabled, id, indeterminate, size. Slots: default.
 - `mui-chip` — Displays a compact interactive label for selections, tags, filters, or removable values. Attributes: active, usage, dismiss, size, disabled, variant. Slots: default, before, after.
 - `mui-chip-input` — Captures multiple selected values as removable chips with optional searchable or custom additions. Attributes: id, label, description, hide-label, placeholder, options, value, allow-custom, disabled, size, name, placement, mobile-stack, breakpoint, menu-slot, padding-block, padding-inline, surface. Slots: description.
 - `mui-chip-rail` — Displays a horizontal rail of chips with scroll overflow controls and edge masking. Attributes: size, bleed, bleed-inline-size, bleed-block-size, skip-label, aria-label. Slots: default.
 - `mui-code` — Displays code or formatted text in a monospace surface. Attributes: size, scrollable, wrap, inline, usage. Slots: default.
+- `mui-color-input` — Captures a hexadecimal colour value through a native colour picker with accessible labelling and supporting guidance. Attributes: value, name, id, label, description, size, disabled, hide-label, hide-value, hide-text, gap, copyable, no-copy. Slots: description, before, after.
 - `mui-comparison-chart` — Compares multiple financial time series as absolute, indexed, or percentage-change lines. Attributes: mode, label, value-format, currency, height, scale, interactive, attribution, loading, error, header-stroke. Slots: header, legend, footer.
 - `mui-container` — Constrains content to a centered or fixed-width layout band with optional size variants. Attributes: width, center, fluid, small, medium, x-medium, large, x-large, size. Slots: default.
 - `mui-context-bar` — Displays a compact prompt context row in the `context-above` or `context-below` slot of `mui-prompt`, usually for an active task, selected context, steering target, or attached instruction. Attributes: none. Slots: default, actions.
@@ -1178,7 +1323,7 @@ Use real Muibook asset paths:
 - `mui-icon-warning` — MuiIconWarning Attributes: size, color. Slots: none.
 - `mui-illustration-trash` — Representative API for Muibook illustration elements. Attributes: size, color, motion. Slots: none.
 - `mui-image` — Frames a slotted image with optional cropping, focal positioning and caption content. Attributes: height, fit, crop, position, zoom, focal-x, focal-y, radius, aspect-ratio. Slots: image, caption.
-- `mui-input` — Captures a single text-like form value with label, validation state and composable affordance slots. Attributes: type, name, value, placeholder, id, label, description, disabled, hide-label, variant, optional, max-length, size, slot-layout, autofocus, menu-slot, padding-block, padding-inline, surface. Slots: description, before, after, inside-before, inside-after, hint.
+- `mui-input` — Captures a single text-like form value with label, validation state and composable affordance slots. Attributes: type, name, value, placeholder, id, label, description, disabled, hide-label, variant, optional, max-length, size, align, input-mode, pattern, step, slot-layout, autofocus, menu-slot, padding-block, padding-inline, surface. Slots: description, before, after, inside-before, inside-start, inside-after, inside-end, hint.
 - `mui-link` — Provides anchor navigation as an inline link or action-styled link with optional supporting content. Attributes: target, href, variant, disabled, weight, stroke, stroke-ring-size, focus-ring, size, download, usage, align. Slots: default, before, after.
 - `mui-list` — Groups ordered or unordered list item content. Attributes: as. Slots: default.
 - `mui-list-item` — Renders one text item within a `mui-list`. Attributes: variant, size, weight. Slots: default.
@@ -1198,7 +1343,7 @@ Use real Muibook asset paths:
 - `mui-range-input` — Selects a numeric value on a range track with optional formatted value feedback. Attributes: min, max, value, step, disabled, bubble, bubble-format, size, label. Slots: none.
 - `mui-responsive` — Switches between slotted layout alternatives at one or two viewport or container breakpoints. Attributes: variant, observe, breakpoint, breakpoint-low, breakpoint-high. Slots: default, show-below, show-middle, show-above.
 - `mui-result-bar` — Composes a compact card/slat result row for agent outputs, file edits, generated artefacts, review actions, and similar prompt response sections. Attributes: label, open, rule, variant, col. Slots: accessory, icon, start, after-label, actions, content.
-- `mui-row` — Arranges table cells in a configurable column grid. Attributes: columns, size, row-id. Slots: default.
+- `mui-row` — Arranges table cells in a configurable column grid. Attributes: columns, size, aligny, space, row-id. Slots: default.
 - `mui-row-group` — Groups related table rows and optionally presents them as a heading region. Attributes: heading. Slots: default.
 - `mui-rule` — Displays a horizontal or vertical divider with configurable length and weight. Attributes: length, weight, direction. Slots: none.
 - `mui-search-input` — Composes mui-input, mui-button and icons into a search affordance that can vertically reveal over adjacent slotted controls. Attributes: id, label, description, placeholder, value, name, size, disabled, open, autofocus, cancel-label, menu-slot, padding-block, padding-inline, surface. Slots: description, action, after.

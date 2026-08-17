@@ -1,0 +1,424 @@
+import React from "react";
+
+declare global {
+  namespace JSX {
+    type MuiIconSize = "xx-small" | "x-small" | "small" | "medium" | "large" | "x-large" | "xx-large";
+
+    interface MuiIconProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+      size?: MuiIconSize;
+      color?: string;
+      slot?: "start" | "end" | "before" | "after";
+    }
+
+    interface IntrinsicElements {
+      // INPUTS
+      "mui-addon": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-field": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        variant?: "default" | "info" | "success" | "warning" | "error" | string;
+        label?: string;
+        "hide-label"?: boolean;
+        message?: string;
+      };
+
+      "mui-file-upload": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        acceptedFileTypes?: string;
+        currentFileName?: string;
+      };
+
+      "mui-input": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        variant?: "default" | "success" | "warning" | "error" | string;
+        type?: "text" | "password" | "email" | "number" | "search" | "tel" | "url" | "date" | "time" | string;
+        id?: string;
+        label: string;
+        "hide-label"?: boolean;
+        disabled?: boolean;
+        name?: string;
+        value?: string;
+        placeholder?: string;
+      };
+      "mui-color-input": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        value?: string;
+        name?: string;
+        id?: string;
+        label?: string;
+        description?: string;
+        size?: "x-small" | "small" | "medium" | "large";
+        disabled?: boolean;
+        "hide-label"?: boolean;
+        "hide-value"?: boolean;
+        "hide-text"?: boolean;
+        gap?: string;
+        copyable?: boolean;
+        "no-copy"?: boolean;
+      };
+
+      "mui-checkbox": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        id?: string;
+        checked?: boolean;
+        disabled?: boolean;
+        name?: string;
+        value?: string;
+        // Optional: hides the label for screen-readers only
+        "hide-label"?: boolean;
+        // Custom property to pass a string label if using attribute instead of slot
+        label?: string;
+      };
+
+      "mui-select": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        options: string;
+        id?: string;
+        label: string;
+        "hide-label"?: boolean;
+        disabled?: boolean;
+        name?: string;
+        value?: string;
+      };
+
+      "mui-switch": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        label: string;
+        disabled?: boolean;
+        checked?: boolean;
+      };
+
+      // CONTENT
+      "mui-body": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        size?: "x-small" | "small" | "medium" | "large";
+        weight?: "regular" | "medium" | "bold";
+        variant?: "default" | "optional" | "success" | "warning" | "error" | string;
+        class?: string;
+      };
+
+      "mui-cell": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        heading?: boolean;
+        action?: boolean;
+        checkbox?: boolean;
+        class?: string;
+      };
+
+      "mui-code": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        size?: "x-small" | "small" | "medium" | "large" | string;
+      };
+
+      "mui-heading": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        size?: string;
+        level?: string;
+        style?: React.CSSProperties & { [key: `--${string}`]: string | undefined };
+      };
+
+      "mui-image": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-list": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        as?: "ul" | "ol" | string;
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      "mui-list-item": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        size?: "x-small" | "small" | "medium" | "large" | string;
+        weight?: "regular" | "medium" | "bold" | string;
+      };
+
+      "mui-message": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        heading: string;
+        icon?: string;
+        variant?: "neutral" | "positive" | "info" | "warning" | "attention" | string;
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      "mui-quote": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-smart-card": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        number: number;
+        state?: "frozen" | string;
+        logo?: string;
+        "logo-height"?: number | "auto";
+        variant?: "plain" | "animated" | string;
+        partner?: string;
+        type?: string;
+        "bg-color"?: string;
+        "bg-image"?: string;
+        inverted?: boolean;
+      };
+
+      // LAYOUT
+      "mui-accordion-core": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-accordion-block": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        heading: string;
+        size?: "xx-small" | "x-small" | "small" | "medium" | "large" | string;
+        "detail-space"?: "none";
+        class?: string;
+      };
+
+      "mui-accordion-group": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        exclusive?: boolean;
+      };
+
+      "mui-accordion-inline": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        heading: string;
+        level?: string | number;
+      };
+
+      "mui-card": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      "mui-card-body": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        size?: "none" | "small" | "medium" | "large";
+      };
+      "mui-card-footer": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      "mui-card-header": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-container": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        small?: boolean;
+        medium?: boolean;
+        large?: boolean;
+        "x-large"?: boolean;
+        fluid?: boolean;
+        center?: boolean;
+      };
+
+      "mui-grid": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        col?: string | number;
+        space?: string;
+        padding?: string;
+        height?: string;
+        width?: string;
+        viewport?: boolean;
+        fill?: boolean;
+        slot?: string;
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      "mui-v-stack": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        space?: string;
+        padding?: string;
+        alignX?: "start" | "center" | "end" | "normal" | string;
+        aligny?: "start" | "center" | "end" | "normal" | string;
+        height?: string;
+        width?: string;
+        viewport?: boolean;
+        fill?: boolean;
+        slot?: string;
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      "mui-h-stack": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        space?: string;
+        padding?: string;
+        alignX?: "start" | "center" | "end" | "normal" | string;
+        aligny?: "start" | "center" | "end" | "normal" | string;
+        height?: string;
+        width?: string;
+        viewport?: boolean;
+        fill?: boolean;
+        slot?: string;
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      "mui-responsive": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        breakpoint?: number;
+        "breakpoint-low"?: number;
+        "breakpoint-high"?: number;
+      };
+
+      "mui-rule": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        direction?: "horizontal" | "vertical";
+        length?: string;
+        weight?: string;
+      };
+
+      "mui-row": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        columns?: string;
+      };
+
+      "mui-row-group": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-slat": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        slot?: "start" | "end";
+        variant?: "default" | "header" | "row" | "action";
+        col?: string;
+        space?: string;
+      };
+
+      "mui-slat-group": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        slot?: string;
+      };
+
+      "mui-avatar": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        slot?: "accessory" | "start" | "end" | "before" | "after" | string;
+        size?: "x-small" | "small" | "medium" | "large" | string;
+        label?: string;
+        image?: string;
+        background?: string;
+        "background-color"?: string;
+        status?: string;
+        "status-label"?: string;
+        usage?: "color-input" | "input" | string;
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      "mui-avatar-chip": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        primary?: string;
+        secondary?: string;
+        image?: string;
+        label?: string;
+        href?: string;
+        target?: string;
+        size?: "x-small" | "small" | "medium" | "large" | string;
+        usage?: "default" | "media-player" | string;
+        slot?: string;
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      // ACTIONS
+      "mui-button": React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
+        slot?: string;
+        variant?: "primary" | "secondary" | "tertiary" | "attention" | string;
+        class?: string;
+        part?: string;
+        style?: React.CSSProperties & { [key: `--${string}`]: string | undefined };
+      };
+
+      "mui-button-group": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-dropdown": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        label?: string;
+        class?: string;
+        style?: React.CSSProperties;
+        position?: string;
+      };
+      "mui-form-group": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        heading?: string;
+        "heading-level"?: "1" | "2" | "3" | "4" | "5" | "6" | string;
+        "heading-space"?: string;
+        "hide-label"?: boolean;
+        variant?: "horizontal" | "default" | string;
+        space?: string;
+        aligny?: "start" | "center" | "end" | "normal" | string;
+        style?: React.CSSProperties & { [key: `--${string}`]: string | undefined };
+        class?: string;
+      };
+      "mui-progress": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        progress?: number;
+      };
+
+      "mui-drawer": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        variant?: string;
+        width?: string;
+        side?: string;
+      };
+
+      "mui-link": React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> & {
+        slot?: string;
+        size?: MuiIconSize | string;
+        variant?: "primary" | "secondary" | "tertiary" | "attention" | string;
+        style?: React.CSSProperties & { [key: `--${string}`]: string | undefined };
+        class?: string;
+        part?: string;
+      };
+
+      // TABS
+      "mui-tab-controller": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-tab-panel": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        item: string;
+      };
+
+      "mui-tab-item": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        icon?: string;
+        active?: boolean;
+        id?: string;
+      };
+
+      "mui-tab-bar": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        speed?: string;
+        controlsPosition?:
+          | "top"
+          | "right"
+          | "bottom"
+          | "left"
+          | "top-right"
+          | "top-left"
+          | "bottom-right"
+          | "bottom-left";
+      };
+
+      // CAROUSEL
+      "mui-carousel-controller": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+
+      "mui-carousel-panel": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        item?: string;
+        slot?: "item" | string;
+      };
+
+      // FEEDBACK
+      "mui-alert": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        variant?: "default" | "success" | "warning" | "error";
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      "mui-spinner": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        size?: MuiIconSize;
+        color?: string;
+        duration?: string;
+        label?: string;
+      };
+
+      "mui-badge": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        variant?: "neutral" | "positive" | "warning" | "attention" | "overlay" | string;
+        color?: string;
+        text?: string;
+        size?: "xx-small" | "x-small" | "small" | "medium" | "large" | string;
+        slot?: "before" | "after" | string;
+        style?: React.CSSProperties;
+        class?: string;
+      };
+
+      // ICONS
+      "mui-icon-accessibility": MuiIconProps;
+      "mui-icon-add": MuiIconProps;
+      "mui-icon-attention": MuiIconProps;
+      "mui-icon-check": MuiIconProps;
+      "mui-icon-close": MuiIconProps;
+      "mui-icon-down-chevron": MuiIconProps;
+      "mui-icon-drag": MuiIconProps;
+      "mui-icon-globe": MuiIconProps;
+      "mui-icon-grid": MuiIconProps;
+      "mui-icon-info": MuiIconProps;
+      "mui-icon-left-arrow": MuiIconProps;
+      "mui-icon-left-chevron": MuiIconProps;
+      "mui-icon-left-sidebar": MuiIconProps;
+      "mui-icon-right-sidebar": MuiIconProps;
+      "mui-icon-menu": MuiIconProps;
+      "mui-icon-message": MuiIconProps;
+      "mui-icon-right-chevron": MuiIconProps;
+      "mui-icon-spinner": MuiIconProps;
+      "mui-icon-stop": MuiIconProps;
+      "mui-icon-subtract": MuiIconProps;
+      "mui-icon-moon": MuiIconProps;
+      "mui-icon-sun": MuiIconProps;
+      "mui-icon-up-arrow": MuiIconProps;
+      "mui-icon-up-chevron": MuiIconProps;
+      "mui-icon-warning": MuiIconProps;
+      "mui-icon-gear": MuiIconProps;
+      "mui-icon-translate": MuiIconProps & { flip?: boolean };
+
+      "mui-icon-toggle": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        slot?: "start" | "end";
+        toggle?: boolean;
+        rotate?: boolean;
+        size?: MuiIconSize;
+      };
+
+      // ADD LOCAL TYPES
+      // E.g.
+      // "dark-mode-toggle": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
+  }
+}

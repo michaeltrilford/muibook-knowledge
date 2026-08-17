@@ -4,6 +4,27 @@ This repo contains the exported Muibook knowledge bundle used by AI coding tools
 
 It is generated from [`@muibook/components`](https://github.com/michaeltrilford/muibook) and published separately at [`michaeltrilford/muibook-knowledge`](https://github.com/michaeltrilford/muibook-knowledge) so tools can read Muibook context without pulling the whole component source repo into every prompt.
 
+## Package Installation & Usage
+
+To use the components in a web application or project:
+
+```bash
+npm install @muibook/components
+```
+
+Import all components into your application bundle or entry point:
+
+```ts
+import "@muibook/components";
+```
+
+Or import individual components as needed:
+
+```ts
+import "@muibook/components/button";
+import "@muibook/components/card";
+```
+
 ## Agent Setup
 
 After installing the Muibook knowledge MCP in a project that uses Muibook components, add an instruction like this to that project's `AGENTS.md` or equivalent agent guidance file:
@@ -33,6 +54,7 @@ This helps clients such as Codex, Antigravity, Claude Code, and OpenCode choose 
 - `skills/style-web-components/SKILL.md` — installable guide for styling and theming Web Components.
 - `skills/style-web-components/SKILL.md` — public skill guide for theming Muibook components with tokens and CSS variables.
 - `skills/create-ux-guidelines/SKILL.md` — public skill guide for writing and reviewing component UX guidelines.
+- `typed-elements.d.ts` — React/TSX ambient declaration augmenting `JSX.IntrinsicElements` for native Web Component usage in React.
 - `AGENTS.md` — operating guidance for coding agents working with Muibook.
 - `DESIGN.md` — Muibook design language, token architecture, and theming guidance.
 - `index.ts` — convenience export for the knowledge files.
