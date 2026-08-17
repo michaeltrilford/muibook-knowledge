@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-17T02:14:42.101Z",
+  "generatedAt": "2026-08-17T02:55:17.476Z",
   "components": {
     "mui-body": {
       "version": 1,
@@ -382,6 +382,16 @@
         }
       ]
     },
+    "mui-table": {
+      "version": 1,
+      "destinationOnly": true,
+      "attributes": [
+        {
+          "name": "card-slot",
+          "description": "Applied to a table used in Card Body, allowing edge-to-edge table layout with content inset matched to the current Card size."
+        }
+      ]
+    },
     "mui-row": {
       "version": 1,
       "destinationOnly": true,
@@ -393,16 +403,6 @@
         {
           "name": "card-slot",
           "description": "Applied to a Table Row used in Card Body, allowing the row to use horizontal padding matched to the current Card size."
-        }
-      ]
-    },
-    "mui-table": {
-      "version": 1,
-      "destinationOnly": true,
-      "attributes": [
-        {
-          "name": "card-slot",
-          "description": "Applied to a table used in Card Body, allowing edge-to-edge table layout with content inset matched to the current Card size."
         }
       ]
     },
